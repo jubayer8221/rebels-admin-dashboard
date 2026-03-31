@@ -1,0 +1,337 @@
+
+import React, { useState, useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { createUpdateProduct } from '../features/products/productSlice';
+import { Save, Package, Layers, Image as ImageIcon, Tag } from 'lucide-react';
+
+interface ProductFormProps {
+    initialData?: any;
+    onClose: () => void;
+}
+
+const ProductForm: React.FC<ProductFormProps> = ({ initialData, onClose }) => {
+    const dispatch = useAppDispatch();
+    const { loading, error } = useAppSelector((state) => state.products);
+
+    // State for Image Upload
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+    const [formData, setFormData] = useState({
+        name: '',
+        description: '',
+        price: '',
+        discount: '0',
+        stock: '0',
+        categoryId: '1',
+        fabric: '',
+        color: '',
+        size: 'M',
+        type: '',
+        brand: 'Rebels',
+        material: '',
+        careInstructions: '',
+        genderID: 'Male',
+        imageUrl: ''
+    });
+
+    useEffect(() => {
+        if (initialData) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setFormData({
+                name: initialData.name || '',
+                description: initialData.description || '',
+                price: initialData.price?.toString() || '',
+                discount: initialData.discount?.toString() || '0',
+                stock: initialData.stock?.toString() || '0',
+                categoryId: initialData.categoryId?.toString() || '1',
+                fabric: initialData.fabric || '',
+                color: initialData.color || '',
+                size: initialData.size || 'M',
+                type: initialData.type || '',
+                brand: initialData.brand || 'Rebels',
+                material: initialData.material || '',
+                careInstructions: initialData.careInstructions || '',
+                genderID: initialData.genderID || 'Male',
+                imageUrl: initialData.imageUrl || ''
+            });
+            if (initialData.imageUrl) setPreviewUrl(initialData.imageUrl);
+        }
+    }, [initialData]);
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            setSelectedFile(file);
+            setPreviewUrl(URL.createObjectURL(file));
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        // 1. Create FormData for Multipart (Image + JSON)
+        const data = new FormData();
+
+        // 2. Map exactly to .NET Product Entity Properties
+        data.append('Id', (initialData?.id || 0).toString());
+        data.append('ProductId', (initialData?.productId || 0).toString());
+        data.append('Name', formData.name);
+        data.append('Description', formData.description);
+        data.append('Price', formData.price); // .NET handles decimal parsing
+        data.append('Discount', formData.discount);
+        data.append('Stock', formData.stock);
+        data.append('CategoryId', formData.categoryId);
+        data.append('Fabric', formData.fabric);
+        data.append('Color', formData.color);
+        data.append('Size', formData.size);
+        data.append('Type', formData.type);
+        data.append('Brand', formData.brand);
+        data.append('Material', formData.material);
+        data.append('CareInstructions', formData.careInstructions);
+        data.append('GenderID', formData.genderID);
+        data.append('ImageUrl', formData.imageUrl);
+
+        // 3. Append the physical file if selected
+        if (selectedFile) {
+            data.append('ImageFile', selectedFile);
+        }
+
+        const result = await dispatch(createUpdateProduct(data));
+        if (createUpdateProduct.fulfilled.match(result)) {
+            onClose();
+        }
+    };
+
+    const inputClass = "w-full border border-gray-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all bg-gray-50/50 focus:bg-white";
+
+    return (
+        <form onSubmit={handleSubmit} className="space-y-6 max-h-[75vh] overflow-y-auto px-4 custom-scrollbar">
+            {error && <div className="p-3 bg-red-50 text-red-600 rounded-xl text-xs font-bold">{error}</div>}
+
+            {/* Image Upload Zone */}
+            <div className="flex flex-col items-center gap-4 py-2">
+                <div className="w-32 h-32 bg-gray-100 rounded-[2rem] border-2 border-dashed border-gray-200 overflow-hidden flex items-center justify-center relative group">
+                    {previewUrl ? (
+                        <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
+                    ) : (
+                        <ImageIcon className="text-gray-300" size={32} />
+                    )}
+                    <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
+                        <span className="text-white text-[10px] font-bold uppercase">Change</span>
+                        <input type="file" className="hidden" onChange={handleFileChange} accept="image/*" />
+                    </label>
+                </div>
+            </div>
+
+            {/* Basic Info */}
+            <section className="space-y-4">
+                <h3 className="text-[10px] font-black uppercase tracking-widest text-gray-400 flex items-center gap-2">
+                    <Package size={14} /> Core Details
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="md:col-span-2">
+                        <label className="text-[11px] font-bold text-gray-500 mb-1 block">PRODUCT NAME *</label>
+                        <input required className={inputClass} value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+                    </div>
+                    <div>
+                        <label className="text-[11px] font-bold text-gray-500 mb-1 block">PRICE (BDT) *</label>
+                        <input required type="number" step="0.01" className={inputClass} value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} />
+                    </div>
+                    <div>
+                        <label className="text-[11px] font-bold text-gray-500 mb-1 block">DISCOUNT</label>
+                        <input type="number" step="0.01" className={inputClass} value={formData.discount} onChange={(e) => setFormData({ ...formData, discount: e.target.value })} />
+                    </div>
+                </div>
+            </section>
+
+            {/* Specifications */}
+            <section className="space-y-4">
+                <h3 className="text-[10px] font-black uppercase tracking-widest text-gray-400 flex items-center gap-2">
+                    <Layers size={14} /> Technical Specs
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div>
+                        <label className="text-[11px] font-bold text-gray-500 mb-1 block">STOCK</label>
+                        <input type="number" className={inputClass} value={formData.stock} onChange={(e) => setFormData({ ...formData, stock: e.target.value })} />
+                    </div>
+                    <div>
+                        <label className="text-[11px] font-bold text-gray-500 mb-1 block">SIZE</label>
+                        <select className={inputClass} value={formData.size} onChange={(e) => setFormData({ ...formData, size: e.target.value })}>
+                            <option value="S">Small</option><option value="M">Medium</option><option value="L">Large</option><option value="XL">Extra Large</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label className="text-[11px] font-bold text-gray-500 mb-1 block">GENDER</label>
+                        <select className={inputClass} value={formData.genderID} onChange={(e) => setFormData({ ...formData, genderID: e.target.value })}>
+                            <option value="Male">Male</option><option value="Female">Female</option><option value="Unisex">Unisex</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            {/* Footer Actions */}
+            <div className="sticky bottom-0 bg-white pt-6 pb-2 flex gap-3">
+                <button type="button" onClick={onClose} className="flex-1 py-4 border border-gray-200 rounded-2xl font-bold text-gray-500 hover:bg-gray-50 transition">Cancel</button>
+                <button type="submit" disabled={loading} className="flex-1 py-4 bg-black text-white rounded-2xl font-bold hover:bg-blue-600 shadow-xl transition-all flex items-center justify-center gap-2">
+                    <Save size={18} /> {loading ? 'Syncing...' : 'Save Product'}
+                </button>
+            </div>
+        </form>
+    );
+};
+
+export default ProductForm;
+// import React, { useState, useEffect } from 'react';
+// import { useAppDispatch, useAppSelector } from '../store/hooks';
+// import { createUpdateProduct } from '../features/products/productSlice';
+// import { Save, Package, Layers } from 'lucide-react';
+
+// interface ProductFormProps {
+//     initialData?: any;
+//     onClose: () => void;
+// }
+
+// const ProductForm: React.FC<ProductFormProps> = ({ initialData, onClose }) => {
+//     const dispatch = useAppDispatch();
+//     const { loading, error } = useAppSelector((state) => state.products);
+
+//     const [formData, setFormData] = useState({
+//         name: '',
+//         price: '',
+//         discount: '0',
+//         stock: '0',
+//         categoryId: '1', // Default to 1 to avoid NULL errors in DB
+//         brand: 'Rebels',
+//         type: '',
+//         fabric: '',
+//         color: '',
+//         size: 'M',
+//         material: '',
+//         genderID: 'Male',
+//         description: '',
+//         careInstructions: '',
+//         imageUrl: ''
+//     });
+
+//     useEffect(() => {
+//         if (initialData) {
+//             setFormData({
+//                 name: initialData.name || '',
+//                 price: initialData.price?.toString() || '',
+//                 discount: initialData.discount?.toString() || '0',
+//                 stock: initialData.stock?.toString() || '0',
+//                 categoryId: initialData.categoryId?.toString() || '1',
+//                 brand: initialData.brand || 'Rebels',
+//                 type: initialData.type || '',
+//                 fabric: initialData.fabric || '',
+//                 color: initialData.color || '',
+//                 size: initialData.size || 'M',
+//                 material: initialData.material || '',
+//                 genderID: initialData.genderID || 'Male',
+//                 description: initialData.description || '',
+//                 careInstructions: initialData.careInstructions || '',
+//                 imageUrl: initialData.imageUrl || ''
+//             });
+//         }
+//     }, [initialData]);
+
+//     const handleSubmit = async (e: React.FormEvent) => {
+//         e.preventDefault();
+
+//         // Matching your C# Product Entity exactly
+//         const payload = {
+//             id: initialData?.id || 0, // Primary Key
+//             productId: initialData?.productId || 0,
+//             name: formData.name,
+//             description: formData.description || "",
+//             price: parseFloat(formData.price) || 0,
+//             discount: parseFloat(formData.discount) || 0,
+//             stock: parseInt(formData.stock) || 0,
+//             categoryId: parseInt(formData.categoryId) || 1, // Cannot be null
+//             fabric: formData.fabric || "",
+//             color: formData.color || "",
+//             size: formData.size || "",
+//             type: formData.type || "",
+//             brand: formData.brand || "Rebels",
+//             material: formData.material || "",
+//             careInstructions: formData.careInstructions || "",
+//             genderID: formData.genderID || "Male",
+//             imageUrl: formData.imageUrl || ""
+//         };
+
+//         const result = await dispatch(createUpdateProduct(payload));
+//         if (createUpdateProduct.fulfilled.match(result)) {
+//             onClose();
+//         }
+//     };
+
+//     const inputClass = "w-full border border-gray-200 rounded-xl p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all bg-gray-50/50 focus:bg-white";
+
+//     return (
+//         <form onSubmit={handleSubmit} className="space-y-6 max-h-[70vh] overflow-y-auto px-2 custom-scrollbar">
+//             {error && (
+//                 <div className="p-3 bg-red-50 border border-red-100 text-red-600 text-xs rounded-lg">
+//                     {error}
+//                 </div>
+//             )}
+
+//             <section className="space-y-4">
+//                 <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center gap-2">
+//                     <Package size={14} /> Basic Details
+//                 </h3>
+//                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//                     <div className="md:col-span-2">
+//                         <label className="text-xs font-semibold text-gray-600 mb-1 block">Product Title</label>
+//                         <input required className={inputClass} value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="e.g. Slim T-shirt" />
+//                     </div>
+//                     <div>
+//                         <label className="text-xs font-semibold text-gray-600 mb-1 block">Price (BDT)</label>
+//                         <input required type="number" step="0.01" className={inputClass} value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} />
+//                     </div>
+//                     <div>
+//                         <label className="text-xs font-semibold text-gray-600 mb-1 block">Discount</label>
+//                         <input type="number" step="0.01" className={inputClass} value={formData.discount} onChange={(e) => setFormData({ ...formData, discount: e.target.value })} />
+//                     </div>
+//                 </div>
+//             </section>
+
+//             <section className="space-y-4">
+//                 <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center gap-2">
+//                     <Layers size={14} /> Specifications
+//                 </h3>
+//                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+//                     <div>
+//                         <label className="text-xs font-semibold text-gray-600 mb-1 block">Stock</label>
+//                         <input required type="number" className={inputClass} value={formData.stock} onChange={(e) => setFormData({ ...formData, stock: e.target.value })} />
+//                     </div>
+//                     <div>
+//                         <label className="text-xs font-semibold text-gray-600 mb-1 block">Category ID</label>
+//                         <input required type="number" className={inputClass} value={formData.categoryId} onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })} />
+//                     </div>
+//                     <div>
+//                         <label className="text-xs font-semibold text-gray-600 mb-1 block">Size</label>
+//                         <select className={inputClass} value={formData.size} onChange={(e) => setFormData({ ...formData, size: e.target.value })}>
+//                             <option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option>
+//                         </select>
+//                     </div>
+//                     <div>
+//                         <label className="text-xs font-semibold text-gray-600 mb-1 block">Gender</label>
+//                         <select className={inputClass} value={formData.genderID} onChange={(e) => setFormData({ ...formData, genderID: e.target.value })}>
+//                             <option value="Male">Male</option><option value="Female">Female</option><option value="Unisex">Unisex</option>
+//                         </select>
+//                     </div>
+//                 </div>
+//             </section>
+
+//             <div className="sticky bottom-0 bg-white pt-4 border-t border-gray-100 flex gap-3">
+//                 <button type="button" onClick={onClose} className="flex-1 px-4 py-3 border border-gray-200 rounded-xl font-bold text-gray-600 hover:bg-gray-50 transition">Cancel</button>
+//                 <button type="submit" disabled={loading} className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all flex items-center justify-center gap-2">
+//                     <Save size={18} /> {loading ? 'Saving...' : 'Save Product'}
+//                 </button>
+//             </div>
+//         </form>
+//     );
+// };
+
+// export default ProductForm;
