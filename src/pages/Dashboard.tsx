@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Card from '../components/Card';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchProducts } from '../features/products/productSlice';
-import { TrendingUp, ShoppingBag, Package, Layers, Calendar, Clock } from 'lucide-react';
+import { TrendingUp, Package, Calendar, Clock } from 'lucide-react';
 
 const Dashboard = () => {
     const dispatch = useAppDispatch();

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { createUpdateProduct } from '../features/products/productSlice';
-import { Save, Package, Layers, Image as ImageIcon, Tag } from 'lucide-react';
+import { Save, Package, Layers, Image as ImageIcon } from 'lucide-react';
 
 interface ProductFormProps {
     initialData?: any;
