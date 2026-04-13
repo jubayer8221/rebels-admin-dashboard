@@ -3,169 +3,152 @@ import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchProducts, deleteProduct } from '../features/products/productSlice';
 import ProductForm from './ProductForm';
-import { Plus, Edit3, Trash2, Loader2, X, PackageOpen, AlertTriangle } from 'lucide-react';
+import { Plus, Edit3, Trash2, Loader2, X, Eye, ShieldCheck, Shirt, Info } from 'lucide-react';
 
 const Products = () => {
     const dispatch = useAppDispatch();
     const { items, loading } = useAppSelector((state) => state.products);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
     useEffect(() => {
         dispatch(fetchProducts());
     }, [dispatch]);
 
-    // --- PROCEED WITH CONFIRM: EDIT ---
-    const handleEdit = (product: any) => {
-        const confirmEdit = window.confirm(`Open editor for "${product.name}"?`);
-        if (confirmEdit) {
-            setSelectedProduct(product);
-            setIsModalOpen(true);
-        }
+    const openView = (product: any) => {
+        setSelectedProduct(product);
+        setIsViewModalOpen(true);
     };
 
-    // --- PROCEED WITH CONFIRM: DELETE ---
-    const handleDelete = async (id: number, name: string) => {
-        // Using a template literal for a clear, bold message
-        const confirmDelete = window.confirm(
-            "REBELS INVENTORY SYSTEM\n" +
-            "----------------------------\n" +
-            `Are you sure you want to PERMANENTLY delete:\n"${name}"?\n\n` +
-            "This action cannot be undone."
-        );
+    const handleEdit = (product: any) => {
+        setSelectedProduct(product);
+        setIsModalOpen(true);
+    };
 
-        if (confirmDelete) {
+    const handleDelete = async (id: number, name: string) => {
+        if (window.confirm(`Are you sure you want to remove ${name}?`)) {
             await dispatch(deleteProduct(id));
         }
     };
 
     return (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="max-w-full mx-auto space-y-10">
+            {/* Header: Classy Serif + Clean Sans */}
+            <div className="flex flex-col md:flex-row justify-between items-end border-b border-gray-200 pb-8">
                 <div>
-                    <h1 className="text-3xl font-black text-gray-900 tracking-tighter uppercase italic">Inventory</h1>
-                    <p className="text-gray-600 font-bold text-xs uppercase tracking-[0.2em] mt-1">Live Product Management</p>
+                    <h1 className="text-5xl font-serif italic text-gray-900 leading-tight">Catalog</h1>
+                    <p className="text-gray-500 font-medium tracking-[.2em] uppercase text-[10px] mt-2 flex items-center gap-2">
+                        <ShieldCheck size={14} className="text-gray-400" /> Authorized Inventory Access
+                    </p>
                 </div>
                 <button
                     onClick={() => { setSelectedProduct(null); setIsModalOpen(true); }}
-                    className="bg-black text-white px-8 py-4 rounded-2xl font-black uppercase text-xs tracking-widest flex items-center gap-3 hover:bg-blue-600 transition-all shadow-2xl shadow-blue-200/20 active:scale-95"
+                    className="mt-6 bg-gray-900 text-white px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest hover:bg-gray-700 transition-all flex items-center gap-2 active:scale-95"
                 >
-                    <Plus size={18} strokeWidth={3} /> Add Product
+                    <Plus size={16} /> Add New Entry
                 </button>
             </div>
 
-            {/* Table Section */}
-            <div className="bg-white rounded-[3rem] border border-gray-100 shadow-2xl shadow-gray-200/40 overflow-hidden">
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
-                        <thead className="bg-gray-50/50 border-b border-gray-100">
-                            <tr>
-                                <th className="px-10 py-8 text-[10px] font-black uppercase tracking-[0.3em] text-gray-600">Product</th>
-                                <th className="px-10 py-8 text-[10px] font-black uppercase tracking-[0.3em] text-gray-600">Attributes</th>
-                                <th className="px-10 py-8 text-[10px] font-black uppercase tracking-[0.3em] text-gray-600">Pricing</th>
-                                <th className="px-10 py-8 text-[10px] font-black uppercase tracking-[0.3em] text-gray-600 text-right">Control</th>
+            {/* Product Table */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <table className="w-full text-left border-collapse">
+                    <thead className="bg-gray-50/50">
+                        <tr>
+                            <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Product Item</th>
+                            <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Inventory Status</th>
+                            <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Pricing</th>
+                            <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50">
+                        {loading && items.length === 0 ? (
+                            <tr><td colSpan={4} className="py-20 text-center"><Loader2 className="animate-spin mx-auto text-gray-300" /></td></tr>
+                        ) : items.map((product: any) => (
+                            <tr key={product.id} className="hover:bg-gray-50/50 group transition-colors">
+                                <td className="px-8 py-6">
+                                    <div className="flex items-center gap-6">
+                                        <div className="w-14 h-14 bg-gray-100 rounded-lg overflow-hidden border border-gray-100">
+                                            {product.imageUrl && <img src={product.imageUrl} alt="" className="w-full h-full object-cover" />}
+                                        </div>
+                                        <div>
+                                            <p className="font-serif text-lg text-gray-900 leading-none mb-1">{product.name}</p>
+                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">{product.brand} — {product.type}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="px-8 py-6">
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-xs font-bold text-gray-700">{product.stock} in stock</span>
+                                        <span className="text-[10px] font-medium text-gray-400 uppercase tracking-widest">Size {product.size} / {product.color}</span>
+                                    </div>
+                                </td>
+                                <td className="px-8 py-6">
+                                    <div className="flex flex-col">
+                                        <span className="text-md font-bold text-gray-900">৳{product.discount}</span>
+                                        <span className="text-xs text-gray-400 line-through tracking-tighter">৳{product.price}</span>
+                                    </div>
+                                </td>
+                                <td className="px-8 py-6">
+                                    <div className="flex justify-end gap-3">
+                                        <button onClick={() => openView(product)} className="p-2.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="View Details"><Eye size={18} /></button>
+                                        <button onClick={() => handleEdit(product)} className="p-2.5 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all" title="Edit"><Edit3 size={18} /></button>
+                                        <button onClick={() => handleDelete(product.id, product.name)} className="p-2.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Delete"><Trash2 size={18} /></button>
+                                    </div>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-50">
-                            {loading && items.length === 0 ? (
-                                <tr>
-                                    <td colSpan={4} className="py-40 text-center">
-                                        <Loader2 className="animate-spin mx-auto text-blue-600 mb-6" size={48} strokeWidth={1} />
-                                        <p className="text-[10px] text-gray-600 font-black uppercase tracking-widest">Accessing Server Resources...</p>
-                                    </td>
-                                </tr>
-                            ) : items.length === 0 ? (
-                                <tr>
-                                    <td colSpan={4} className="py-40 text-center text-gray-300">
-                                        <PackageOpen className="mx-auto mb-6 opacity-10" size={80} />
-                                        <p className="font-black uppercase text-xs tracking-widest text-gray-600">Warehouse is empty</p>
-                                    </td>
-                                </tr>
-                            ) : (
-                                items.map((product: any) => (
-                                    <tr key={product.id} className="hover:bg-gray-50/80 transition-all group">
-                                        <td className="px-10 py-7">
-                                            <div className="flex items-center gap-6">
-                                                <div className="w-20 h-20 bg-gray-100 rounded-3xl shrink-0 overflow-hidden border border-gray-100 group-hover:scale-105 transition-all duration-500 shadow-sm">
-                                                    {product.imageUrl ? (
-                                                        <img src={product.imageUrl} alt="" className="w-full h-full object-cover" />
-                                                    ) : (
-                                                        <div className="w-full h-full flex items-center justify-center text-[9px] font-black text-gray-300 uppercase italic">No Media</div>
-                                                    )}
-                                                </div>
-                                                <div>
-                                                    <p className="font-bold text-gray-900 text-md  leading-none mb-2">{product.name}</p>
-                                                    <span className="bg-gray-800 text-white text-[11px] font-black px-2 py-1 rounded-md uppercase ">SKU: {product.productId}</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="px-10 py-7">
-                                            <div className="flex flex-wrap gap-2">
-                                                <span className="px-3 py-1.5 bg-white border border-gray-200 text-gray-500 text-[10px] font-black rounded-xl uppercase shadow-sm">Size {product.size}</span>
-                                                <span className="px-3 py-1.5 bg-white border border-gray-200 text-gray-500 text-[10px] font-black rounded-xl uppercase shadow-sm">{product.color}</span>
-                                            </div>
-                                        </td>
-                                        <td className="px-10 py-7">
-                                            <p className="font-bold text-gray-900 text-md ">৳{Number(product.price).toLocaleString()}</p>
-                                            <p className="font-bold text-gray-900 text-md ">৳{Number(product.discount).toLocaleString()}</p>
-
-                                            <p className="text-[10px] text-green-600 font-black uppercase mt-1 tracking-tighter">{product.stock} in stock</p>
-                                        </td>
-                                        <td className="px-10 py-7 text-right">
-                                            <div className="flex justify-end gap-4 opacity-40 group-hover:opacity-100 transition-opacity">
-                                                <button
-                                                    onClick={() => handleEdit(product)}
-                                                    className="p-4 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-2xl transition-all active:scale-90 bg-gray-50 group-hover:bg-white"
-                                                    title="Modify Record"
-                                                >
-                                                    <Edit3 size={20} />
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDelete(product.id, product.name)}
-                                                    className="p-4 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-2xl transition-all active:scale-90 bg-gray-50 group-hover:bg-white"
-                                                    title="Destroy Record"
-                                                >
-                                                    <Trash2 size={20} />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
-                </div>
+                        ))}
+                    </tbody>
+                </table>
             </div>
 
-            {/* Modal */}
-            {isModalOpen && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
-                    <div className="absolute inset-0 bg-gray-900/80 backdrop-blur-md animate-in fade-in duration-500" onClick={() => setIsModalOpen(false)} />
-                    <div className="relative bg-white w-full max-w-2xl rounded-[3rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-500">
-                        <div className="p-10 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                            <div>
-                                <h2 className="text-3xl font-black text-gray-900 uppercase italic tracking-tighter">
-                                    {selectedProduct ? 'Update Item' : 'New Entry'}
-                                </h2>
-                                <div className="flex items-center gap-2 mt-2">
-                                    <AlertTriangle size={12} className="text-orange-500" />
-                                    <p className="text-[10px] text-gray-600 font-bold uppercase tracking-widest">Verify all specifications before saving</p>
+            {/* --- VIEW MODAL --- */}
+            {isViewModalOpen && selectedProduct && (
+                <div className="fixed inset-0 z-110 flex items-center justify-center p-6">
+                    <div className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm" onClick={() => setIsViewModalOpen(false)} />
+                    <div className="relative bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                        <div className="p-8 space-y-6">
+                            <div className="flex justify-between items-start">
+                                <div className="space-y-1">
+                                    <h3 className="text-3xl font-serif italic text-gray-900">{selectedProduct.name}</h3>
+                                    <p className="text-[10px] font-black uppercase tracking-[.3em] text-blue-600">{selectedProduct.brand} Premium Wear</p>
+                                </div>
+                                <button onClick={() => setIsViewModalOpen(false)} className="text-gray-400 hover:text-gray-900"><X size={20} /></button>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4 border-y border-gray-100 py-6">
+                                <DetailItem label="Fabric" value={selectedProduct.fabric} icon={<Shirt size={14} />} />
+                                <DetailItem label="Material" value={selectedProduct.material} icon={<Info size={14} />} />
+                                <DetailItem label="Category ID" value={selectedProduct.categoryId} />
+                                <DetailItem label="Gender" value={selectedProduct.genderID} />
+                                <DetailItem label="Current Stock" value={selectedProduct.stock} />
+                                <DetailItem label="Size/Fit" value={`${selectedProduct.size} / ${selectedProduct.type}`} />
+                            </div>
+
+                            <div className="flex justify-between items-center bg-gray-50 p-4 rounded-xl">
+                                <div className="text-[10px] font-bold uppercase text-gray-400 tracking-widest">Pricing Model</div>
+                                <div className="text-right">
+                                    <p className="text-2xl font-bold text-gray-900">৳{selectedProduct.discount}</p>
+                                    <p className="text-xs text-gray-400 line-through">MSRP ৳{selectedProduct.price}</p>
                                 </div>
                             </div>
-                            <button onClick={() => setIsModalOpen(false)} className="p-4 hover:bg-white rounded-full text-gray-600 transition-all shadow-sm active:scale-90 bg-gray-50">
-                                <X size={24} />
-                            </button>
                         </div>
-                        <div className="p-10 max-h-[70vh] overflow-y-auto custom-scrollbar">
-                            <ProductForm
-                                initialData={selectedProduct}
-                                onClose={() => {
-                                    setIsModalOpen(false);
-                                    dispatch(fetchProducts());
-                                }}
-                            />
+                    </div>
+                </div>
+            )}
+
+            {/* --- FORM MODAL (ADD/EDIT) --- */}
+            {isModalOpen && (
+                <div className="fixed inset-0 z-100 flex items-center justify-center p-6">
+                    <div className="absolute inset-0 bg-gray-900/60 backdrop-blur-md" onClick={() => setIsModalOpen(false)} />
+                    <div className="relative bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95">
+                        <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+                            <h2 className="text-xl font-bold text-gray-900 tracking-tight">{selectedProduct ? 'Edit Product' : 'New Entry'}</h2>
+                            <button onClick={() => setIsModalOpen(false)} className="p-2 text-gray-400 hover:text-gray-900 transition-all"><X size={20} /></button>
+                        </div>
+                        <div className="p-8 max-h-[70vh] overflow-y-auto">
+                            <ProductForm initialData={selectedProduct} onClose={() => { setIsModalOpen(false); dispatch(fetchProducts()); }} />
                         </div>
                     </div>
                 </div>
@@ -173,5 +156,15 @@ const Products = () => {
         </div>
     );
 };
+
+// Helper component for View Modal
+const DetailItem = ({ label, value, icon }: { label: string, value: any, icon?: any }) => (
+    <div className="space-y-1">
+        <p className="text-[9px] font-black uppercase text-gray-400 tracking-widest flex items-center gap-1">
+            {icon} {label}
+        </p>
+        <p className="text-sm font-semibold text-gray-800">{value || "N/A"}</p>
+    </div>
+);
 
 export default Products;

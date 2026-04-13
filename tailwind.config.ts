@@ -14,7 +14,7 @@ export default {
                 }
             },
             borderRadius: {
-                'rebels': '2rem', // Custom 32px rounding
+                'rebels': '2rem', 
             }
         },
     },

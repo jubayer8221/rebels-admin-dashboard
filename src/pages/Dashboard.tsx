@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Card from '../components/Card';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchProducts } from '../features/products/productSlice';
 import { TrendingUp, Package, Calendar, Clock } from 'lucide-react';
+import ViewProductDialog from '../components/ViewProductDialog';
 
 const Dashboard = () => {
     const dispatch = useAppDispatch();
     const { items, loading } = useAppSelector((state) => state.products);
+    const [selectedItem, setSelectedItem] = useState<any | null>(null);
 
     useEffect(() => {
         dispatch(fetchProducts());
@@ -24,7 +26,7 @@ const Dashboard = () => {
     const addedThisMonth = items.filter((item: any) => new Date(item.createdAt) >= oneMonthAgo).length;
 
     return (
-        <div className="space-y-8 p-2">
+        <div className="space-y-8">
             {/* ... Existing Header ... */}
 
             {/* Main Metrics */}
@@ -62,9 +64,12 @@ const Dashboard = () => {
 
                 <div className="divide-y divide-gray-50">
                     {items.slice(0, 5).map((item: any) => (
-                        <div key={item.id} className="p-5 flex items-center justify-between hover:bg-gray-50/50 transition-colors">
-                            <div className="flex items-center gap-4">
-                                <div className="w-10 h-10 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0">
+                        <div
+                            key={item.id}
+                            onClick={() => setSelectedItem(item)} // Trigger Dialog
+                            className="p-5 flex items-center justify-between hover:bg-gray-50/50 cursor-pointer transition-colors"
+                        >                            <div className="flex items-center gap-4">
+                                <div className="w-10 h-10 bg-gray-100 rounded-xl overflow-hidden shrink-0">
                                     <img src={item.imageUrl} alt="" className="w-full h-full object-cover opacity-80" />
                                 </div>
                                 <div>
@@ -86,6 +91,13 @@ const Dashboard = () => {
                     )}
                 </div>
             </motion.div>
+
+            {selectedItem && (
+                <ViewProductDialog
+                    item={selectedItem}
+                    onClose={() => setSelectedItem(null)}
+                />
+            )}
         </div>
     );
 };
