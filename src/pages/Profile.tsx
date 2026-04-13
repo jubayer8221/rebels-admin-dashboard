@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import {
     User,
@@ -136,10 +137,10 @@ export const Profile = () => {
 };
 
 // Reusable Components
-const InfoItem = ({ icon, label, value }) => (
+const InfoItem = ({ icon, label, value }: { icon: React.ReactElement; label: string; value: string }) => (
     <div className="flex items-start gap-4">
         <div className="p-2 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-xl">
-            {React.cloneElement(icon, { size: 20 })}
+            {React.cloneElement(icon, { className: "w-5 h-5" } as any)}
         </div>
         <div>
             <p className="text-xs text-gray-400 uppercase tracking-wider font-bold mb-1">{label}</p>
@@ -148,7 +149,7 @@ const InfoItem = ({ icon, label, value }) => (
     </div>
 );
 
-const ActivityItem = ({ title, time, desc, icon }) => (
+const ActivityItem = ({ title, time, desc, icon }: { title: string; time: string; desc: string; icon: React.ReactElement }) => (
     <div className="flex gap-4">
         <div className="mt-1">{icon}</div>
         <div>
