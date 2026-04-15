@@ -11,7 +11,7 @@ import { ChevronDown, RotateCcw, Settings2 } from 'lucide-react';
 
 export const DesignSettingsPanel: React.FC = () => {
     const { settings, updateSetting, updateMultiple, resetToDefaults } = useDesignSettings();
-    const [isExpanded, setIsExpanded] = useState(true);
+    const [isExpanded, setIsExpanded] = useState(false);
 
     return (
         <div className="fixed bottom-6 right-6 z-50">

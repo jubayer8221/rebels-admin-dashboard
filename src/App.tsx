@@ -37,7 +37,9 @@ function App() {
               <Route path="/customers" element={<Customers />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/profile" element={<Profile />} />
+              <DesignSettingsPanel />
             </Route>
+
           </Route>
 
           {/* --- NAVIGATION HELPERS --- */}
@@ -57,7 +59,6 @@ function App() {
         </Routes>
 
         {/* Design Settings Panel - Always visible */}
-        <DesignSettingsPanel />
       </DesignSettingsProvider>
     </Provider>
   );
