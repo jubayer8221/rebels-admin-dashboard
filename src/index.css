@@ -1,124 +1,327 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&display=swap');
 
-@theme {
-  --color-rebels-blue: #2563eb;
-  --color-rebels-black: #000000;
+:root {
+  color-scheme: light;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-  --radius-rebels: 2rem;
+html {
+  min-height: 100%;
 }
 
 body {
-  @apply bg-gray-50 text-gray-900 antialiased;
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-sans);
 }
 
-/* :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+.dark {
+  color-scheme: dark;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
+* {
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
+::selection {
+  background: rgba(var(--color-primary-rgb), 0.2);
+  color: var(--color-text-primary);
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+/* ============================================================================
+   DESIGN SYSTEM - GLOBAL CSS VARIABLES
+   ============================================================================ */
+
+@theme {
+  /* Brand colors from Tailwind */
+  --color-rebels-blue: #2563eb;
+  --color-rebels-black: #000000;
+  --radius-rebels: 2rem;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+/* ============================================================================
+   DESIGN SYSTEM - CUSTOM TAILWIND UTILITIES
+   Maps p-ds-*, px-ds-*, py-ds-*, m-ds-*, gap-ds-*, text-ds-* 
+   to CSS variables set by DesignSettingsContext
+   ============================================================================ */
+
+@layer utilities {
+
+  /* Padding */
+  .p-ds-xs {
+    padding: var(--padding-xs);
+  }
+
+  .p-ds-sm {
+    padding: var(--padding-sm);
+  }
+
+  .p-ds-md {
+    padding: var(--padding-md);
+  }
+
+  .p-ds-lg {
+    padding: var(--padding-lg);
+  }
+
+  .p-ds-xl {
+    padding: var(--padding-xl);
+  }
+
+  /* Padding X */
+  .px-ds-xs {
+    padding-left: var(--padding-xs);
+    padding-right: var(--padding-xs);
+  }
+
+  .px-ds-sm {
+    padding-left: var(--padding-sm);
+    padding-right: var(--padding-sm);
+  }
+
+  .px-ds-md {
+    padding-left: var(--padding-md);
+    padding-right: var(--padding-md);
+  }
+
+  .px-ds-lg {
+    padding-left: var(--padding-lg);
+    padding-right: var(--padding-lg);
+  }
+
+  .px-ds-xl {
+    padding-left: var(--padding-xl);
+    padding-right: var(--padding-xl);
+  }
+
+  /* Padding Y */
+  .py-ds-xs {
+    padding-top: var(--padding-xs);
+    padding-bottom: var(--padding-xs);
+  }
+
+  .py-ds-sm {
+    padding-top: var(--padding-sm);
+    padding-bottom: var(--padding-sm);
+  }
+
+  .py-ds-md {
+    padding-top: var(--padding-md);
+    padding-bottom: var(--padding-md);
+  }
+
+  .py-ds-lg {
+    padding-top: var(--padding-lg);
+    padding-bottom: var(--padding-lg);
+  }
+
+  .py-ds-xl {
+    padding-top: var(--padding-xl);
+    padding-bottom: var(--padding-xl);
+  }
+
+  /* Margin */
+  .m-ds-xs {
+    margin: var(--margin-xs);
+  }
+
+  .m-ds-sm {
+    margin: var(--margin-sm);
+  }
+
+  .m-ds-md {
+    margin: var(--margin-md);
+  }
+
+  .m-ds-lg {
+    margin: var(--margin-lg);
+  }
+
+  .m-ds-xl {
+    margin: var(--margin-xl);
+  }
+
+  /* Margin X */
+  .mx-ds-xs {
+    margin-left: var(--margin-xs);
+    margin-right: var(--margin-xs);
+  }
+
+  .mx-ds-sm {
+    margin-left: var(--margin-sm);
+    margin-right: var(--margin-sm);
+  }
+
+  .mx-ds-md {
+    margin-left: var(--margin-md);
+    margin-right: var(--margin-md);
+  }
+
+  .mx-ds-lg {
+    margin-left: var(--margin-lg);
+    margin-right: var(--margin-lg);
+  }
+
+  .mx-ds-xl {
+    margin-left: var(--margin-xl);
+    margin-right: var(--margin-xl);
+  }
+
+  /* Margin Y */
+  .my-ds-xs {
+    margin-top: var(--margin-xs);
+    margin-bottom: var(--margin-xs);
+  }
+
+  .my-ds-sm {
+    margin-top: var(--margin-sm);
+    margin-bottom: var(--margin-sm);
+  }
+
+  .my-ds-md {
+    margin-top: var(--margin-md);
+    margin-bottom: var(--margin-md);
+  }
+
+  .my-ds-lg {
+    margin-top: var(--margin-lg);
+    margin-bottom: var(--margin-lg);
+  }
+
+  .my-ds-xl {
+    margin-top: var(--margin-xl);
+    margin-bottom: var(--margin-xl);
+  }
+
+  /* Margin Top */
+  .mt-ds-xs {
+    margin-top: var(--margin-xs);
+  }
+
+  .mt-ds-sm {
+    margin-top: var(--margin-sm);
+  }
+
+  .mt-ds-md {
+    margin-top: var(--margin-md);
+  }
+
+  .mt-ds-lg {
+    margin-top: var(--margin-lg);
+  }
+
+  .mt-ds-xl {
+    margin-top: var(--margin-xl);
+  }
+
+  /* Margin Bottom */
+  .mb-ds-xs {
+    margin-bottom: var(--margin-xs);
+  }
+
+  .mb-ds-sm {
+    margin-bottom: var(--margin-sm);
+  }
+
+  .mb-ds-md {
+    margin-bottom: var(--margin-md);
+  }
+
+  .mb-ds-lg {
+    margin-bottom: var(--margin-lg);
+  }
+
+  .mb-ds-xl {
+    margin-bottom: var(--margin-xl);
+  }
+
+  /* Gap */
+  .gap-ds-xs {
+    gap: var(--gap-xs);
+  }
+
+  .gap-ds-sm {
+    gap: var(--gap-sm);
+  }
+
+  .gap-ds-md {
+    gap: var(--gap-md);
+  }
+
+  .gap-ds-lg {
+    gap: var(--gap-lg);
+  }
+
+  .gap-ds-xl {
+    gap: var(--gap-xl);
+  }
+
+  /* Font sizes */
+  .text-ds-xs {
+    font-size: var(--font-size-xs);
+  }
+
+  .text-ds-sm {
+    font-size: var(--font-size-sm);
+  }
+
+  .text-ds-md {
+    font-size: var(--font-size-md);
+  }
+
+  .text-ds-lg {
+    font-size: var(--font-size-lg);
+  }
+
+  .text-ds-xl {
+    font-size: var(--font-size-xl);
+  }
+
+  .text-ds-2xl {
+    font-size: var(--font-size-2xl);
   }
 }
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
+
+/* Central theme utility classes */
+.bg-surface-primary {
+  background-color: var(--color-bg-primary);
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+.bg-surface-secondary {
+  background-color: var(--color-bg-secondary);
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
-} */
+.bg-surface-tertiary {
+  background-color: var(--color-bg-tertiary);
+}
+
+.text-primary {
+  color: var(--color-text-primary);
+}
+
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.text-tertiary {
+  color: var(--color-text-tertiary);
+}
+
+.border-default {
+  border-color: var(--color-border);
+}
+
+.shadow-surface {
+  box-shadow: var(--shadow-base);
+}
+
+.shadow-panel {
+  box-shadow: var(--shadow-md);
+}

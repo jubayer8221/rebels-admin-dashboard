@@ -52,24 +52,57 @@ const clearStorage = () => {
 
 // ─── Async Thunks ─────────────────────────────────────────────────────────────
 
+// export const login = createAsyncThunk<AuthUser, LoginCredentials, { rejectValue: string }>(
+//     'auth/login',
+//     async (credentials, { rejectWithValue }) => {
+//         try {
+//             const res = await fetch(`${BASE_URL}/auth/login`, {
+//                 method: 'POST',
+//                 headers: { 'Content-Type': 'application/json' },
+//                 body: JSON.stringify(credentials),
+//             });
+
+//             if (!res.ok) {
+//                 const err = await res.json().catch(() => ({}));
+//                 return rejectWithValue(err?.message ?? 'Invalid email or password');
+//             }
+
+//             const user: AuthUser = await res.json();
+//             saveToStorage(user);
+//             return user;
+//         } catch {
+//             return rejectWithValue('Network error. Please try again.');
+//         }
+//     }
+// );
+
+// ─── Async Thunks ─────────────────────────────────────────────────────────────
+
 export const login = createAsyncThunk<AuthUser, LoginCredentials, { rejectValue: string }>(
     'auth/login',
     async (credentials, { rejectWithValue }) => {
         try {
-            const res = await fetch(`${BASE_URL}/auth/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(credentials),
-            });
+            // --- MOCK API BEHAVIOR (Temporary) ---
+            // Simulate a short network delay
+            await new Promise((resolve) => setTimeout(resolve, 800));
 
-            if (!res.ok) {
-                const err = await res.json().catch(() => ({}));
-                return rejectWithValue(err?.message ?? 'Invalid email or password');
-            }
+            // Create a fake user object
+            const mockUser: AuthUser = {
+                id: 1,
+                name: 'Admin User',
+                email: credentials.email,
+                role: 'Admin',
+                token: 'mock-jwt-token-123',
+            };
 
-            const user: AuthUser = await res.json();
-            saveToStorage(user);
-            return user;
+            saveToStorage(mockUser);
+            return mockUser;
+            // -------------------------------------
+            
+            /* Comment out the real fetch for now:
+            const res = await fetch(`${BASE_URL}/auth/login`, { ... });
+            ... 
+            */
         } catch {
             return rejectWithValue('Network error. Please try again.');
         }

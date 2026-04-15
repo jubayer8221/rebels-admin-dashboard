@@ -1,6 +1,7 @@
 import React from 'react';
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
+import { getPadding } from '../utils/designTokens';
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -8,17 +9,17 @@ interface LayoutProps {
 
 const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
     return (
-        <div className="flex min-h-screen bg-gray-50">
-            {/* Sidebar remains fixed on the left */}
+        <div className="flex min-h-screen bg-gray-50 dark:bg-slate-950">
+            {/* Sidebar: Fixed position usually handled inside its own component */}
             <Sidebar />
 
             <div className="flex-1 flex flex-col">
-                {/* Navbar sits at the top of the content area */}
+                {/* Navbar: Sticky or Static at the top */}
                 <Navbar />
 
                 {/* Main Content Area */}
-                <main className="p-8">
-                    <div className="max-w-7xl mx-auto animate-in fade-in duration-500">
+                <main className={getPadding('md')}>
+                    <div className="max-w-full mx-auto animate-in fade-in duration-500">
                         {children}
                     </div>
                 </main>

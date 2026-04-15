@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchProducts } from '../features/products/productSlice';
 import { TrendingUp, Package, Calendar, Clock } from 'lucide-react';
 import ViewProductDialog from '../components/ViewProductDialog';
+import { getGap, getMarginBottom, getPadding } from '../utils/designTokens';
 
 const Dashboard = () => {
     const dispatch = useAppDispatch();
@@ -26,11 +27,11 @@ const Dashboard = () => {
     const addedThisMonth = items.filter((item: any) => new Date(item.createdAt) >= oneMonthAgo).length;
 
     return (
-        <div className="space-y-8">
+        <div className={`space-y-8 ${getMarginBottom('xl')}`}>
             {/* ... Existing Header ... */}
 
             {/* Main Metrics */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 ${getGap('lg')}`}>
                 <Card title="Revenue" value="৳45,231" change="+12%" icon={<TrendingUp size={18} />} />
                 <Card title="Products" value={items.length.toString()} change="Live" icon={<Package size={18} />} />
 
@@ -47,7 +48,7 @@ const Dashboard = () => {
                     title="New This Month"
                     value={loading ? "..." : addedThisMonth.toString()}
                     change="Volume"
-                    icon={<Calendar className="text-blue-500" size={18} />}
+                    icon={<Calendar size={18} />}
                 />
             </div>
 
@@ -57,7 +58,7 @@ const Dashboard = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden"
             >
-                <div className="p-6 border-b border-gray-50 flex items-center justify-between">
+                <div className={`${getPadding('lg')} border-b border-gray-50 flex items-center justify-between`}>
                     <h2 className="text-lg font-bold text-gray-900">Recent Inventory Changes</h2>
                     <span className="text-[10px] font-black bg-blue-50 text-blue-600 px-3 py-1 rounded-full uppercase tracking-widest">Last 10 Entries</span>
                 </div>
@@ -67,8 +68,8 @@ const Dashboard = () => {
                         <div
                             key={item.id}
                             onClick={() => setSelectedItem(item)} // Trigger Dialog
-                            className="p-5 flex items-center justify-between hover:bg-gray-50/50 cursor-pointer transition-colors"
-                        >                            <div className="flex items-center gap-4">
+                            className={`${getPadding('lg')} flex items-center justify-between hover:bg-gray-50/50 cursor-pointer transition-colors`}
+                        >                            <div className={`flex items-center ${getGap('md')}`}>
                                 <div className="w-10 h-10 bg-gray-100 rounded-xl overflow-hidden shrink-0">
                                     <img src={item.imageUrl} alt="" className="w-full h-full object-cover opacity-80" />
                                 </div>

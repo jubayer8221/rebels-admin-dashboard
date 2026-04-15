@@ -3,11 +3,14 @@ import { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchProducts, deleteProduct } from '../features/products/productSlice';
 import ProductForm from './ProductForm';
-import { Plus, Edit3, Trash2, Loader2, X, Eye, ShieldCheck, Shirt, Info } from 'lucide-react';
+import { Plus, Edit3, Trash2, Loader2, X, Eye, ShieldCheck } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
+import { getPaddingX, getPaddingY, getMarginBottom, getGap, getMarginTop } from '../utils/designTokens';
 
 const Products = () => {
     const dispatch = useAppDispatch();
     const { items, loading } = useAppSelector((state) => state.products);
+    const { isDark, compactMode } = useTheme();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
@@ -17,84 +20,98 @@ const Products = () => {
         dispatch(fetchProducts());
     }, [dispatch]);
 
-    const openView = (product: any) => {
-        setSelectedProduct(product);
-        setIsViewModalOpen(true);
-    };
-
-    const handleEdit = (product: any) => {
-        setSelectedProduct(product);
-        setIsModalOpen(true);
-    };
-
+    const openView = (product: any) => { setSelectedProduct(product); setIsViewModalOpen(true); };
+    const handleEdit = (product: any) => { setSelectedProduct(product); setIsModalOpen(true); };
     const handleDelete = async (id: number, name: string) => {
         if (window.confirm(`Are you sure you want to remove ${name}?`)) {
             await dispatch(deleteProduct(id));
         }
     };
 
+    // Theme-aware style tokens
+    const surface = isDark ? 'bg-[#1a1a1a] border-[#2a2a2a]' : 'bg-white border-gray-100';
+    const surfaceAlt = isDark ? 'bg-[#111] border-[#2a2a2a]' : 'bg-white border-gray-100';
+    const rowHover = isDark ? 'hover:bg-[#222]' : 'hover:bg-gray-50/60';
+    const headText = isDark ? 'text-gray-500' : 'text-gray-400';
+    const bodyText = isDark ? 'text-gray-100' : 'text-gray-900';
+    const subText = isDark ? 'text-gray-500' : 'text-gray-400';
+    const divideColor = isDark ? 'divide-[#2a2a2a]' : 'divide-gray-50';
+    const borderColor = isDark ? 'border-[#2a2a2a]' : 'border-gray-100';
+    const overlayBg = isDark ? 'bg-[#0d0d0d]/80' : 'bg-gray-900/40';
+    const px = compactMode ? getPaddingX('md') : getPaddingX('xl');
+    const cellPy = compactMode ? getPaddingY('sm') : getPaddingY('lg');
+
     return (
-        <div className="max-w-full mx-auto space-y-10">
-            {/* Header: Classy Serif + Clean Sans */}
-            <div className="flex flex-col md:flex-row justify-between items-end border-b border-gray-200 pb-8">
+        <div className={`max-w-full mx-auto ${getMarginBottom('xl')} ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>
+
+            {/* Header */}
+            <div className={`flex flex-col md:flex-row justify-between items-end border-b ${getPaddingY('xl')} ${borderColor}`}>
                 <div>
-                    <h1 className="text-5xl font-serif italic text-gray-900 leading-tight">Catalog</h1>
-                    <p className="text-gray-500 font-medium tracking-[.2em] uppercase text-[10px] mt-2 flex items-center gap-2">
-                        <ShieldCheck size={14} className="text-gray-400" /> Authorized Inventory Access
+                    <h1 className={`text-5xl font-serif italic leading-tight ${bodyText}`}>Catalog</h1>
+                    <p className={`font-medium tracking-[.2em] uppercase text-[10px] mt-2 flex items-center gap-2 ${subText}`}>
+                        <ShieldCheck size={14} /> Authorized Inventory Access
                     </p>
                 </div>
                 <button
                     onClick={() => { setSelectedProduct(null); setIsModalOpen(true); }}
-                    className="mt-6 bg-gray-900 text-white px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest hover:bg-gray-700 transition-all flex items-center gap-2 active:scale-95"
+                    className={`${getMarginTop('lg')} text-white ${getPaddingX('xl')} ${getPaddingY('sm')} rounded-full font-bold text-xs uppercase tracking-widest transition-all flex items-center ${getGap('sm')} active:scale-95 hover:opacity-90`}
+                    style={{ backgroundColor: 'var(--accent)' }}
                 >
                     <Plus size={16} /> Add New Entry
                 </button>
             </div>
 
             {/* Product Table */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div className={`rounded-2xl border shadow-sm overflow-hidden ${surface}`}>
                 <table className="w-full text-left border-collapse">
-                    <thead className="bg-gray-50/50">
+                    <thead className={isDark ? 'bg-[#111]' : 'bg-gray-50/50'}>
                         <tr>
-                            <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Product Item</th>
-                            <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Inventory Status</th>
-                            <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Pricing</th>
-                            <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-right">Actions</th>
+                            {['Product Item', 'Inventory Status', 'Pricing', 'Actions'].map(h => (
+                                <th key={h} className={`${px} ${getPaddingY('lg')} text-[10px] font-bold uppercase tracking-widest ${headText} ${h === 'Actions' ? 'text-right' : ''}`}>{h}</th>
+                            ))}
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-50">
+                    <tbody className={`${divideColor} divide-y`}>
                         {loading && items.length === 0 ? (
-                            <tr><td colSpan={4} className="py-20 text-center"><Loader2 className="animate-spin mx-auto text-gray-300" /></td></tr>
+                            <tr><td colSpan={4} className={`${getPaddingY('xl')} text-center`}>
+                                <Loader2 className={`animate-spin mx-auto ${isDark ? 'text-gray-600' : 'text-gray-300'}`} />
+                            </td></tr>
                         ) : items.map((product: any) => (
-                            <tr key={product.id} className="hover:bg-gray-50/50 group transition-colors">
-                                <td className="px-8 py-6">
+                            <tr key={product.id} className={`${rowHover} group transition-colors`}>
+                                <td className={`${px} ${cellPy}`}>
                                     <div className="flex items-center gap-6">
-                                        <div className="w-14 h-14 bg-gray-100 rounded-lg overflow-hidden border border-gray-100">
+                                        <div className={`${compactMode ? 'w-10 h-10' : 'w-14 h-14'} rounded-lg overflow-hidden border ${isDark ? 'bg-[#111] border-[#333]' : 'bg-gray-100 border-gray-100'}`}>
                                             {product.imageUrl && <img src={product.imageUrl} alt="" className="w-full h-full object-cover" />}
                                         </div>
                                         <div>
-                                            <p className="font-serif text-lg text-gray-900 leading-none mb-1">{product.name}</p>
-                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">{product.brand} — {product.type}</p>
+                                            <p className={`font-serif ${compactMode ? 'text-base' : 'text-lg'} leading-none mb-1 ${bodyText}`}>{product.name}</p>
+                                            <p className={`text-[10px] font-bold uppercase tracking-tighter ${subText}`}>{product.brand} — {product.type}</p>
                                         </div>
                                     </div>
                                 </td>
-                                <td className="px-8 py-6">
+                                <td className={`${px} ${cellPy}`}>
                                     <div className="flex flex-col gap-1">
-                                        <span className="text-xs font-bold text-gray-700">{product.stock} in stock</span>
-                                        <span className="text-[10px] font-medium text-gray-400 uppercase tracking-widest">Size {product.size} / {product.color}</span>
+                                        <span className={`text-xs font-bold ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{product.stock} in stock</span>
+                                        <span className={`text-[10px] font-medium uppercase tracking-widest ${subText}`}>Size {product.size} / {product.color}</span>
                                     </div>
                                 </td>
-                                <td className="px-8 py-6">
+                                <td className={`${px} ${cellPy}`}>
                                     <div className="flex flex-col">
-                                        <span className="text-md font-bold text-gray-900">৳{product.discount}</span>
-                                        <span className="text-xs text-gray-400 line-through tracking-tighter">৳{product.price}</span>
+                                        <span className={`text-md font-bold ${bodyText}`}>৳{product.discount}</span>
+                                        <span className={`text-xs line-through tracking-tighter ${subText}`}>৳{product.price}</span>
                                     </div>
                                 </td>
-                                <td className="px-8 py-6">
+                                <td className={`${px} ${cellPy}`}>
                                     <div className="flex justify-end gap-3">
-                                        <button onClick={() => openView(product)} className="p-2.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="View Details"><Eye size={18} /></button>
-                                        <button onClick={() => handleEdit(product)} className="p-2.5 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all" title="Edit"><Edit3 size={18} /></button>
-                                        <button onClick={() => handleDelete(product.id, product.name)} className="p-2.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Delete"><Trash2 size={18} /></button>
+                                        <button onClick={() => openView(product)}
+                                            className={`p-2.5 rounded-lg transition-all ${isDark ? 'text-gray-500 hover:text-[--accent] hover:bg-[--accent-subtle]' : 'text-gray-400 hover:text-blue-600 hover:bg-blue-50'}`}
+                                            title="View Details"><Eye size={18} /></button>
+                                        <button onClick={() => handleEdit(product)}
+                                            className={`p-2.5 rounded-lg transition-all ${isDark ? 'text-gray-500 hover:text-gray-200 hover:bg-[#333]' : 'text-gray-400 hover:text-gray-900 hover:bg-gray-100'}`}
+                                            title="Edit"><Edit3 size={18} /></button>
+                                        <button onClick={() => handleDelete(product.id, product.name)}
+                                            className={`p-2.5 rounded-lg transition-all ${isDark ? 'text-gray-500 hover:text-red-400 hover:bg-red-950/30' : 'text-gray-400 hover:text-red-600 hover:bg-red-50'}`}
+                                            title="Delete"><Trash2 size={18} /></button>
                                     </div>
                                 </td>
                             </tr>
@@ -103,34 +120,40 @@ const Products = () => {
                 </table>
             </div>
 
-            {/* --- VIEW MODAL --- */}
+            {/* VIEW MODAL */}
             {isViewModalOpen && selectedProduct && (
-                <div className="fixed inset-0 z-110 flex items-center justify-center p-6">
-                    <div className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm" onClick={() => setIsViewModalOpen(false)} />
-                    <div className="relative bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+                    <div className={`absolute inset-0 backdrop-blur-sm ${overlayBg}`} onClick={() => setIsViewModalOpen(false)} />
+                    <div className={`relative w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden ${surfaceAlt} border`}>
                         <div className="p-8 space-y-6">
                             <div className="flex justify-between items-start">
                                 <div className="space-y-1">
-                                    <h3 className="text-3xl font-serif italic text-gray-900">{selectedProduct.name}</h3>
-                                    <p className="text-[10px] font-black uppercase tracking-[.3em] text-blue-600">{selectedProduct.brand} Premium Wear</p>
+                                    <h3 className={`text-3xl font-serif italic ${bodyText}`}>{selectedProduct.name}</h3>
+                                    <p className="text-[10px] font-black uppercase tracking-[.3em]" style={{ color: 'var(--accent)' }}>{selectedProduct.brand} Premium Wear</p>
                                 </div>
-                                <button onClick={() => setIsViewModalOpen(false)} className="text-gray-400 hover:text-gray-900"><X size={20} /></button>
+                                <button onClick={() => setIsViewModalOpen(false)} className={`${subText} hover:${bodyText}`}><X size={20} /></button>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4 border-y border-gray-100 py-6">
-                                <DetailItem label="Fabric" value={selectedProduct.fabric} icon={<Shirt size={14} />} />
-                                <DetailItem label="Material" value={selectedProduct.material} icon={<Info size={14} />} />
-                                <DetailItem label="Category ID" value={selectedProduct.categoryId} />
-                                <DetailItem label="Gender" value={selectedProduct.genderID} />
-                                <DetailItem label="Current Stock" value={selectedProduct.stock} />
-                                <DetailItem label="Size/Fit" value={`${selectedProduct.size} / ${selectedProduct.type}`} />
+                            <div className={`grid grid-cols-2 gap-4 border-y py-6 ${borderColor}`}>
+                                {[
+                                    { label: 'Fabric', value: selectedProduct.fabric },
+                                    { label: 'Category ID', value: selectedProduct.categoryId },
+                                    { label: 'Gender', value: selectedProduct.genderID },
+                                    { label: 'Current Stock', value: selectedProduct.stock },
+                                    { label: 'Size/Fit', value: `${selectedProduct.size} / ${selectedProduct.type}` },
+                                ].map(item => (
+                                    <div key={item.label} className="space-y-1">
+                                        <p className={`text-[9px] font-black uppercase tracking-widest ${subText}`}>{item.label}</p>
+                                        <p className={`text-sm font-semibold ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>{item.value || 'N/A'}</p>
+                                    </div>
+                                ))}
                             </div>
 
-                            <div className="flex justify-between items-center bg-gray-50 p-4 rounded-xl">
-                                <div className="text-[10px] font-bold uppercase text-gray-400 tracking-widest">Pricing Model</div>
+                            <div className={`flex justify-between items-center p-4 rounded-xl ${isDark ? 'bg-[#111]' : 'bg-gray-50'}`}>
+                                <div className={`text-[10px] font-bold uppercase tracking-widest ${subText}`}>Pricing Model</div>
                                 <div className="text-right">
-                                    <p className="text-2xl font-bold text-gray-900">৳{selectedProduct.discount}</p>
-                                    <p className="text-xs text-gray-400 line-through">MSRP ৳{selectedProduct.price}</p>
+                                    <p className={`text-2xl font-bold ${bodyText}`}>৳{selectedProduct.discount}</p>
+                                    <p className={`text-xs line-through ${subText}`}>MSRP ৳{selectedProduct.price}</p>
                                 </div>
                             </div>
                         </div>
@@ -138,14 +161,14 @@ const Products = () => {
                 </div>
             )}
 
-            {/* --- FORM MODAL (ADD/EDIT) --- */}
+            {/* FORM MODAL */}
             {isModalOpen && (
-                <div className="fixed inset-0 z-100 flex items-center justify-center p-6">
-                    <div className="absolute inset-0 bg-gray-900/60 backdrop-blur-md" onClick={() => setIsModalOpen(false)} />
-                    <div className="relative bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95">
-                        <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-                            <h2 className="text-xl font-bold text-gray-900 tracking-tight">{selectedProduct ? 'Edit Product' : 'New Entry'}</h2>
-                            <button onClick={() => setIsModalOpen(false)} className="p-2 text-gray-400 hover:text-gray-900 transition-all"><X size={20} /></button>
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+                    <div className={`absolute inset-0 backdrop-blur-md ${isDark ? 'bg-black/70' : 'bg-gray-900/60'}`} onClick={() => setIsModalOpen(false)} />
+                    <div className={`relative w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden border ${surface}`}>
+                        <div className={`p-6 border-b flex justify-between items-center ${borderColor}`}>
+                            <h2 className={`text-xl font-bold tracking-tight ${bodyText}`}>{selectedProduct ? 'Edit Product' : 'New Entry'}</h2>
+                            <button onClick={() => setIsModalOpen(false)} className={`p-2 transition-all ${subText} hover:${bodyText}`}><X size={20} /></button>
                         </div>
                         <div className="p-8 max-h-[70vh] overflow-y-auto">
                             <ProductForm initialData={selectedProduct} onClose={() => { setIsModalOpen(false); dispatch(fetchProducts()); }} />
@@ -156,15 +179,5 @@ const Products = () => {
         </div>
     );
 };
-
-// Helper component for View Modal
-const DetailItem = ({ label, value, icon }: { label: string, value: any, icon?: any }) => (
-    <div className="space-y-1">
-        <p className="text-[9px] font-black uppercase text-gray-400 tracking-widest flex items-center gap-1">
-            {icon} {label}
-        </p>
-        <p className="text-sm font-semibold text-gray-800">{value || "N/A"}</p>
-    </div>
-);
 
 export default Products;
