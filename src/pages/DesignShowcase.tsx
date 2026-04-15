@@ -8,13 +8,24 @@
 import React from 'react';
 import { useDesignSettings, ROUNDNESS_PRESETS, SPACING_SCALE_PRESETS } from '../context/DesignSettingsContext';
 import { Button } from '../components/Button';
-import { getGap, getPadding, getRadius, getMarginBottom, getMarginTop } from '../utils/designTokens';
+import { getGap, getPadding, getMarginBottom, getMarginTop } from '../utils/designTokens';
 import { Container } from '../components/Container';
 import Card from '../components/Card';
 import { BarChart3, Users, TrendingUp, Zap } from 'lucide-react';
 
 export const DesignShowcase: React.FC = () => {
     const { settings, updateSetting, updateMultiple } = useDesignSettings();
+
+    const getRadius = (size: string): string => {
+        const radiusMap: Record<string, string> = {
+            'sm': 'rounded-sm',
+            'md': 'rounded-md',
+            'lg': 'rounded-lg',
+            'xl': 'rounded-xl',
+            'full': 'rounded-full',
+        };
+        return radiusMap[size] || 'rounded-md';
+    };
 
     return (
         <Container size="xl" padding="lg" className="space-y-8">
