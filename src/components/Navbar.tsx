@@ -35,10 +35,10 @@ const INITIAL_NOTIFS: Notification[] = [
 ];
 
 const notifIconMap: Record<NotifType, { icon: React.ElementType; bg: string; color: string }> = {
-    order: { icon: ShoppingBag, bg: 'bg-blue-50', color: 'text-blue-500' },
-    stock: { icon: Package, bg: 'bg-amber-50', color: 'text-amber-500' },
-    customer: { icon: UserPlus, bg: 'bg-emerald-50', color: 'text-emerald-500' },
-    warning: { icon: AlertTriangle, bg: 'bg-red-50', color: 'text-red-500' },
+    order: { icon: ShoppingBag, bg: 'bg-[var(--color-primary)]/10', color: 'text-[var(--color-primary)]' },
+    stock: { icon: Package, bg: 'bg-[var(--color-warning)]/10', color: 'text-[var(--color-warning)]' },
+    customer: { icon: UserPlus, bg: 'bg-[var(--color-success)]/10', color: 'text-[var(--color-success)]' },
+    warning: { icon: AlertTriangle, bg: 'bg-[var(--color-error)]/10', color: 'text-[var(--color-error)]' },
 };
 
 // ─── Outside-click hook ───────────────────────────────────────────────────────
@@ -61,9 +61,9 @@ const MenuItem = ({ icon: Icon, label, onClick, danger = false }: {
     <button
         onClick={onClick}
         className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-colors
-        ${danger ? 'text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white'}`}
+        ${danger ? 'text-[var(--color-error)] hover:bg-[var(--color-error)]/10' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)] hover:text-[var(--color-text-primary)]'}`}
     >
-        <Icon size={15} className={danger ? 'text-red-400' : 'text-gray-400 dark:text-gray-400'} />
+        <Icon size={15} className={danger ? 'text-[var(--color-error)]' : 'text-[var(--color-text-tertiary)]'} />
         {label}
     </button>
 );
@@ -103,12 +103,12 @@ const Navbar = () => {
 
     // Shared avatar element
     const Avatar = ({ sm = false }: { sm?: boolean }) => (
-        <div className={`${sm ? 'w-9 h-9 rounded-xl' : 'w-10 h-10 rounded-2xl'} overflow-hidden border border-blue-200 shrink-0`}>
+        <div className={`${sm ? 'w-9 h-9 rounded-xl' : 'w-10 h-10 rounded-2xl'} overflow-hidden border border-[var(--color-border)] shrink-0`}>
             {avatarUrl ? (
                 <img src={avatarUrl} alt={displayName} className="w-full h-full object-cover"
                     onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
             ) : (
-                <div className="w-full h-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-black group-hover:bg-blue-600 group-hover:text-white transition-all">
+                <div className="w-full h-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] flex items-center justify-center text-xs font-black group-hover:bg-[var(--color-primary)] group-hover:text-white transition-all">
                     {getInitials(displayName)}
                 </div>
             )}
@@ -125,15 +125,14 @@ const Navbar = () => {
                 .drop-in { animation: dropIn 0.16s cubic-bezier(0.16,1,0.3,1); }
             `}</style>
 
-            <header className={`h-20 bg-white/80 dark:bg-slate-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 flex items-center justify-between ${getPaddingX('xl')} sticky top-0 z-40`}>
+            <header className={`h-20 bg-[var(--color-bg-primary)]/80 backdrop-blur-md border-b border-[var(--color-border)] flex items-center justify-between ${getPaddingX('xl')} sticky top-0 z-40`}>
 
-                {/* Search */}
                 <div className="relative w-96">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-400" size={18} />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-tertiary)]" size={18} />
                     <input
                         type="text"
                         placeholder="Search rebels data..."
-                        className={`w-full bg-gray-100 dark:bg-slate-800 border-none rounded-2xl ${getPaddingY('sm')} pl-10 pr-4 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-blue-500 transition-all outline-none`}
+                        className={`w-full bg-[var(--color-bg-secondary)] border-none rounded-2xl ${getPaddingY('sm')} pl-10 pr-4 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)] focus:ring-2 focus:ring-[var(--color-primary-light)] transition-all outline-none`}
                     />
                 </div>
 
@@ -145,26 +144,26 @@ const Navbar = () => {
                             onClick={() => { setNotifOpen(o => !o); setProfileOpen(false); }}
                             className={`relative p-2 rounded-xl transition-all
                                 ${notifOpen
-                                    ? 'bg-gray-100 text-gray-900 dark:bg-slate-800 dark:text-white'
-                                    : 'text-gray-500 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-800 dark:hover:text-white'}`}
+                                    ? 'bg-[var(--color-bg-secondary)] text-[var(--color-text-primary)]'
+                                    : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)] hover:text-[var(--color-text-primary)]'}`}
                         >
                             <Bell size={20} />
                             {unreadCount > 0 && (
-                                <span className="absolute -top-0.5 -right-0.5 min-w-4.5 h-4.5 bg-red-500 text-white text-[10px] font-black flex items-center justify-center rounded-full border-2 border-white px-0.5">
+                                <span className="absolute -top-0.5 -right-0.5 min-w-4.5 h-4.5 bg-[var(--color-error)] text-white text-[10px] font-black flex items-center justify-center rounded-full border-2 border-[var(--color-bg-primary)] px-0.5">
                                     {unreadCount}
                                 </span>
                             )}
                         </button>
 
                         {notifOpen && (
-                            <div className="drop-in absolute right-0 top-[calc(100%+10px)] w-80 bg-white dark:bg-slate-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-xl z-50 overflow-hidden">
+                            <div className="drop-in absolute right-0 top-[calc(100%+10px)] w-80 bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-2xl shadow-[var(--shadow-lg)] z-50 overflow-hidden">
 
                                 {/* Header */}
-                                <div className={`flex items-center justify-between ${getPaddingX('md')} ${getPaddingY('sm')} border-b border-gray-100 dark:border-gray-800`}>
+                                <div className={`flex items-center justify-between ${getPaddingX('md')} ${getPaddingY('sm')} border-b border-[var(--color-border)]`}>
                                     <div className={`flex items-center ${getGap('sm')}`}>
-                                        <p className="text-sm font-black text-gray-900">Notifications</p>
+                                        <p className="text-sm font-black text-[var(--color-text-primary)]">Notifications</p>
                                         {unreadCount > 0 && (
-                                            <span className="text-[10px] font-black bg-black text-white px-2 py-0.5 rounded-full">
+                                            <span className="text-[10px] font-black bg-[var(--color-primary)] text-white px-2 py-0.5 rounded-full">
                                                 {unreadCount} new
                                             </span>
                                         )}
@@ -172,13 +171,13 @@ const Navbar = () => {
                                     <div className="flex items-center gap-1">
                                         {unreadCount > 0 && (
                                             <button onClick={markAllRead}
-                                                className="flex items-center gap-1 text-[11px] font-bold text-blue-500 hover:text-blue-700 px-2 py-1 rounded-lg hover:bg-blue-50 transition">
+                                                className="flex items-center gap-1 text-[11px] font-bold text-[var(--color-primary)] hover:text-[var(--color-primary)]/80 px-2 py-1 rounded-lg hover:bg-[var(--color-primary)]/10 transition">
                                                 <CheckCheck size={12} /> Mark all read
                                             </button>
                                         )}
                                         {notifications.length > 0 && (
                                             <button onClick={clearAll}
-                                                className="p-1.5 rounded-lg text-gray-300 hover:text-red-400 hover:bg-red-50 transition">
+                                                className="p-1.5 rounded-lg text-[var(--color-text-tertiary)] hover:text-[var(--color-error)] hover:bg-[var(--color-error)]/10 transition">
                                                 <Trash2 size={13} />
                                             </button>
                                         )}
@@ -186,11 +185,11 @@ const Navbar = () => {
                                 </div>
 
                                 {/* Notification list */}
-                                <div className="max-h-90 overflow-y-auto divide-y divide-gray-50">
+                                <div className="max-h-90 overflow-y-auto divide-y divide-[var(--color-border)]">
                                     {notifications.length === 0 ? (
                                         <div className="py-12 flex flex-col items-center gap-2">
-                                            <Bell size={28} className="text-gray-200" />
-                                            <p className="text-sm font-bold text-gray-400">All caught up!</p>
+                                            <Bell size={28} className="text-[var(--color-text-disabled)]" />
+                                            <p className="text-sm font-bold text-[var(--color-text-tertiary)]">All caught up!</p>
                                         </div>
                                     ) : notifications.map(n => {
                                         const { icon: NIcon, bg, color } = notifIconMap[n.type];
@@ -199,27 +198,27 @@ const Navbar = () => {
                                                 key={n.id}
                                                 onClick={() => markRead(n.id)}
                                                 className={`flex items-start gap-3 px-4 py-3.5 cursor-pointer transition-colors group
-                                                    ${n.read ? 'bg-white dark:bg-slate-950 hover:bg-gray-50 dark:hover:bg-slate-800' : 'bg-blue-50/40 dark:bg-blue-900/30 hover:bg-blue-50/70'}`}
+                                                    ${n.read ? 'bg-[var(--color-bg-primary)] hover:bg-[var(--color-bg-secondary)]' : 'bg-[var(--color-primary)]/5 hover:bg-[var(--color-primary)]/10'}`}
                                             >
                                                 <div className={`w-9 h-9 rounded-xl ${bg} flex items-center justify-center shrink-0 mt-0.5`}>
                                                     <NIcon size={15} className={color} />
                                                 </div>
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex items-start justify-between gap-2">
-                                                        <p className={`text-sm leading-tight ${n.read ? 'font-medium text-gray-700 dark:text-gray-300' : 'font-black text-gray-900 dark:text-white'}`}>
+                                                        <p className={`text-sm leading-tight ${n.read ? 'font-medium text-[var(--color-text-secondary)]' : 'font-black text-[var(--color-text-primary)]'}`}>
                                                             {n.title}
                                                         </p>
                                                         <button
                                                             onClick={e => { e.stopPropagation(); dismiss(n.id); }}
-                                                            className="opacity-0 group-hover:opacity-100 text-gray-300 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-300 transition shrink-0 mt-0.5"
+                                                            className="opacity-0 group-hover:opacity-100 text-[var(--color-text-disabled)] hover:text-[var(--color-text-secondary)] transition shrink-0 mt-0.5"
                                                         >
                                                             <X size={12} />
                                                         </button>
                                                     </div>
-                                                    <p className="text-xs text-gray-400 font-medium mt-0.5 leading-relaxed">{n.message}</p>
+                                                    <p className="text-xs text-(--color-text-tertiary) font-medium mt-0.5 leading-relaxed">{n.message}</p>
                                                     <div className="flex items-center gap-2 mt-1.5">
-                                                        <span className="text-[10px] text-gray-400 font-medium">{n.time}</span>
-                                                        {!n.read && <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />}
+                                                        <span className="text-[10px] text-[var(--color-text-tertiary)] font-medium">{n.time}</span>
+                                                        {!n.read && <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-primary)]" />}
                                                     </div>
                                                 </div>
                                             </div>
@@ -229,8 +228,8 @@ const Navbar = () => {
 
                                 {/* Footer */}
                                 {notifications.length > 0 && (
-                                    <div className="px-4 py-3 border-t border-gray-100 dark:border-gray-800 text-center">
-                                        <button className="text-xs font-black text-gray-400 dark:text-gray-300 hover:text-black dark:hover:text-white transition">
+                                    <div className="px-4 py-3 border-t border-[var(--color-border)] text-center">
+                                        <button className="text-xs font-black text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] transition">
                                             View all notifications
                                         </button>
                                     </div>
@@ -239,7 +238,7 @@ const Navbar = () => {
                         )}
                     </div>
 
-                    <div className="h-8 w-px bg-gray-200 dark:bg-gray-700" />
+                    <div className="h-8 w-px bg-[var(--color-border)]" />
 
                     {/* ── Profile Trigger + Dropdown ── */}
                     <div className="relative" ref={profileRef}>
@@ -248,29 +247,29 @@ const Navbar = () => {
                             className="flex items-center gap-3 group"
                         >
                             <div className="text-right">
-                                <p className="text-sm font-bold text-gray-800 dark:text-white leading-tight">{displayName}</p>
-                                <p className="text-xs text-gray-400 dark:text-gray-400">{displayRole}</p>
+                                <p className="text-sm font-bold text-[var(--color-text-primary)] leading-tight">{displayName}</p>
+                                <p className="text-xs text-[var(--color-text-tertiary)]">{displayRole}</p>
                             </div>
                             <Avatar />
                             <ChevronDown
                                 size={14}
-                                className={`text-gray-400 transition-transform duration-200 ${profileOpen ? 'rotate-180' : ''}`}
+                                className={`text-[var(--color-text-tertiary)] transition-transform duration-200 ${profileOpen ? 'rotate-180' : ''}`}
                             />
                         </button>
 
                         {profileOpen && (
-                            <div className="drop-in absolute right-0 top-[calc(100%+10px)] w-60 bg-white dark:bg-slate-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-xl py-2 z-50">
+                            <div className="drop-in absolute right-0 top-[calc(100%+10px)] w-60 bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-2xl shadow-[var(--shadow-lg)] py-2 z-50">
 
                                 {/* User info */}
-                                <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+                                <div className="px-4 py-3 border-b border-[var(--color-border)]">
                                     <div className="flex items-center gap-3">
                                         <Avatar />
                                         <div className="min-w-0">
-                                            <p className="text-sm font-black text-gray-900 dark:text-white truncate">{displayName}</p>
-                                            <p className="text-xs text-gray-400 dark:text-gray-400 truncate">{displayEmail}</p>
+                                            <p className="text-sm font-black text-[var(--color-text-primary)] truncate">{displayName}</p>
+                                            <p className="text-xs text-[var(--color-text-tertiary)] truncate">{displayEmail}</p>
                                         </div>
                                     </div>
-                                    <div className="mt-2.5 flex items-center gap-1.5 px-2.5 py-1 bg-black rounded-full w-fit">
+                                    <div className="mt-2.5 flex items-center gap-1.5 px-2.5 py-1 bg-[var(--color-primary)] rounded-full w-fit">
                                         <Shield size={10} className="text-white" />
                                         <span className="text-[10px] font-black text-white uppercase tracking-wider">{displayRole}</span>
                                     </div>

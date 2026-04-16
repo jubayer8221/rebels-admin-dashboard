@@ -9,7 +9,7 @@ interface LayoutProps {
 
 const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
     return (
-        <div className="flex min-h-screen bg-gray-50 dark:bg-slate-950">
+        <div className="flex min-h-screen bg-[var(--color-bg-secondary)]">
             {/* Sidebar: Fixed position usually handled inside its own component */}
             <Sidebar />
 

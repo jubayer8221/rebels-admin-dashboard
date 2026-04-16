@@ -28,21 +28,21 @@ const Products = () => {
         }
     };
 
-    // Theme-aware style tokens
-    const surface = isDark ? 'bg-[#1a1a1a] border-[#2a2a2a]' : 'bg-white border-gray-100';
-    const surfaceAlt = isDark ? 'bg-[#111] border-[#2a2a2a]' : 'bg-white border-gray-100';
-    const rowHover = isDark ? 'hover:bg-[#222]' : 'hover:bg-gray-50/60';
-    const headText = isDark ? 'text-gray-500' : 'text-gray-400';
-    const bodyText = isDark ? 'text-gray-100' : 'text-gray-900';
-    const subText = isDark ? 'text-gray-500' : 'text-gray-400';
-    const divideColor = isDark ? 'divide-[#2a2a2a]' : 'divide-gray-50';
-    const borderColor = isDark ? 'border-[#2a2a2a]' : 'border-gray-100';
-    const overlayBg = isDark ? 'bg-[#0d0d0d]/80' : 'bg-gray-900/40';
+    // Theme-aware style tokens - using CSS variables instead of manual checks
+    const surface = 'bg-[var(--color-bg-primary)] border-[var(--color-border)]';
+    const surfaceAlt = 'bg-[var(--color-bg-primary)] border-[var(--color-border)]';
+    const rowHover = 'hover:bg-[var(--color-bg-secondary)]';
+    const headText = 'text-[var(--color-text-tertiary)]';
+    const bodyText = 'text-[var(--color-text-primary)]';
+    const subText = 'text-[var(--color-text-secondary)]';
+    const divideColor = 'divide-[var(--color-border)]';
+    const borderColor = 'border-[var(--color-border)]';
+    const overlayBg = 'bg-[var(--color-bg-primary)]/80';
     const px = compactMode ? getPaddingX('md') : getPaddingX('xl');
     const cellPy = compactMode ? getPaddingY('sm') : getPaddingY('lg');
 
     return (
-        <div className={`max-w-full mx-auto ${getMarginBottom('xl')} ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>
+        <div className={`max-w-full mx-auto ${getMarginBottom('xl')} text-[var(--color-text-primary)]`}>
 
             {/* Header */}
             <div className={`flex flex-col md:flex-row justify-between items-end border-b ${getPaddingY('xl')} ${borderColor}`}>

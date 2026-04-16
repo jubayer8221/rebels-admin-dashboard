@@ -32,7 +32,7 @@ const Sidebar = () => {
 
     return (
         <aside
-            className={`bg-white dark:bg-slate-950 border-r border-gray-200 dark:border-gray-800 h-screen flex flex-col sticky top-0 transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'w-20' : 'w-64'
+            className={`bg-(--color-bg-primary) border-r border-(--color-border) h-screen flex flex-col sticky top-0 transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'w-20' : 'w-64'
                 }`}
         >
             {/* Logo Section */}
@@ -40,12 +40,12 @@ const Sidebar = () => {
                 {!sidebarCollapsed && (
                     <div>
                         <h1
-                            className="text-2xl font-black tracking-tighter text-slate-950 dark:text-white"
+                            className="text-2xl font-black tracking-tighter text-(--color-text-primary)"
                             style={{ color: accent }}
                         >
                             REBELS.
                         </h1>
-                        <p className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-widest mt-1">
+                        <p className="text-[10px] text-(--color-text-tertiary) font-bold uppercase tracking-widest mt-1">
                             Admin Panel
                         </p>
                     </div>
@@ -61,7 +61,7 @@ const Sidebar = () => {
                 {/* Toggle Button */}
                 <button
                     onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                    className={`${getPadding('sm')} rounded-lg bg-gray-50 dark:bg-slate-900 text-gray-500 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors`}
+                    className={`${getPadding('sm')} rounded-lg bg-(--color-bg-secondary) text-(--color-text-secondary) hover:bg-(--color-bg-tertiary) transition-colors`}
                     style={{ ['--hover-color' as string]: accent }}
                 >
                     {sidebarCollapsed ? <PanelRightClose size={18} /> : <PanelLeftClose size={18} />}
@@ -78,7 +78,7 @@ const Sidebar = () => {
                         className={({ isActive }) =>
                             `flex items-center ${getPadding('sm')} rounded-xl transition-all duration-200 group ${isActive
                                 ? 'text-white shadow-lg'
-                                : 'text-gray-500 hover:bg-gray-50'
+                                : 'text-(--color-text-secondary) hover:bg-(--color-bg-secondary)'
                             }`
                         }
                         style={({ isActive }) =>
@@ -106,11 +106,11 @@ const Sidebar = () => {
             </nav>
 
             {/* Logout Section */}
-            <div className={`${getPadding('sm')} border-t border-gray-100 dark:border-gray-800`}>
+            <div className={`${getPadding('sm')} border-t border-(--color-border)`}>
                 <button
                     onClick={handleLogout}
                     title={sidebarCollapsed ? 'Logout' : ''}
-                    className={`flex items-center w-full ${getPadding('sm')} ${getGap('sm')} text-gray-500 dark:text-gray-300 hover:text-red-600 hover:bg-red-50 dark:hover:bg-slate-800 rounded-xl transition-colors`}
+                    className={`flex items-center w-full ${getPadding('sm')} ${getGap('sm')} text-(--color-text-secondary) hover:text-(--color-error) hover:bg-(--color-error)/10 rounded-xl transition-colors`}
                 >
                     <LogOut
                         size={20}

@@ -42,13 +42,13 @@ export const ThemeSwitcher: React.FC = () => {
     return (
         <div className="relative">
             {/* Theme Mode Toggle */}
-            <div className="flex items-center gap-2 p-2 bg-(--color-bg-secondary) rounded-lg">
+            <div className="flex items-center gap-2 p-2 bg-[var(--color-bg-secondary)] rounded-lg">
                 {/* Light mode button */}
                 <button
                     onClick={() => setMode('light')}
                     className={`p-2 rounded transition-colors ${mode === 'light'
-                        ? 'bg-(--color-primary) text-white'
-                        : 'text-(--color-text-secondary) hover:bg-(--color-bg-tertiary)'
+                        ? 'bg-[var(--color-primary)] text-white'
+                        : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)]'
                         }`}
                     title="Light mode"
                     aria-label="Light mode"
@@ -60,8 +60,8 @@ export const ThemeSwitcher: React.FC = () => {
                 <button
                     onClick={() => setMode('dark')}
                     className={`p-2 rounded transition-colors ${mode === 'dark'
-                        ? 'bg-(--color-primary) text-white'
-                        : 'text-(--color-text-secondary) hover:bg-(--color-bg-tertiary)'
+                        ? 'bg-[var(--color-primary)] text-white'
+                        : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)]'
                         }`}
                     title="Dark mode"
                     aria-label="Dark mode"
@@ -72,7 +72,7 @@ export const ThemeSwitcher: React.FC = () => {
                 {/* Settings button */}
                 <button
                     onClick={() => setShowSettings(!showSettings)}
-                    className="p-2 rounded text-(--color-text-secondary) hover:bg-(--color-bg-tertiary) transition-colors ml-2"
+                    className="p-2 rounded text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)] transition-colors ml-2"
                     title="Theme settings"
                     aria-label="Theme settings"
                 >
@@ -82,10 +82,10 @@ export const ThemeSwitcher: React.FC = () => {
 
             {/* Settings Dropdown */}
             {showSettings && (
-                <div className="absolute right-0 mt-2 w-72 bg-(--color-bg-primary) border border-(--color-border) rounded-lg shadow-lg p-4 z-(--z-index-dropdown)">
+                <div className="absolute right-0 mt-2 w-72 bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-lg shadow-lg p-4 z-[var(--z-index-dropdown)]">
                     {/* Accent Color Selection */}
                     <div className="mb-4">
-                        <h3 className="text-sm font-semibold text-(--color-text-primary) mb-3">
+                        <h3 className="text-sm font-semibold text-[var(--color-text-primary)] mb-3">
                             Brand Color
                         </h3>
                         <div className="grid grid-cols-5 gap-2">
@@ -94,7 +94,7 @@ export const ThemeSwitcher: React.FC = () => {
                                     key={option.color}
                                     onClick={() => setAccent(option.color)}
                                     className={`w-full aspect-square rounded-lg transition-all ${accent === option.color
-                                        ? 'ring-2 ring-offset-2 ring-(--color-primary)'
+                                        ? 'ring-2 ring-offset-2 ring-[var(--color-primary)]'
                                         : 'hover:scale-105'
                                         }`}
                                     style={{ backgroundColor: option.color }}
@@ -106,7 +106,7 @@ export const ThemeSwitcher: React.FC = () => {
                     </div>
 
                     {/* Compact Mode Toggle */}
-                    <div className="border-t border-(--color-border) pt-4">
+                    <div className="border-t border-[var(--color-border)] pt-4">
                         <label className="flex items-center gap-3 cursor-pointer">
                             <input
                                 type="checkbox"
@@ -114,18 +114,18 @@ export const ThemeSwitcher: React.FC = () => {
                                 onChange={e => setCompactMode(e.target.checked)}
                                 className="w-4 h-4 rounded"
                             />
-                            <span className="text-sm font-medium text-(--color-text-primary)">
+                            <span className="text-sm font-medium text-[var(--color-text-primary)]">
                                 Compact layout
                             </span>
                         </label>
                     </div>
 
                     {/* Current theme info */}
-                    <div className="border-t border-(--color-border) mt-4 pt-4">
-                        <p className="text-xs text-olor-text-tertiary)">
-                            Mode: <span className="font-semibold text-(--color-text-secondary)">{mode}</span>
+                    <div className="border-t border-[var(--color-border)] mt-4 pt-4">
+                        <p className="text-xs text-[var(--color-text-tertiary)]">
+                            Mode: <span className="font-semibold text-[var(--color-text-secondary)]">{mode}</span>
                         </p>
-                        <p className="text-xs text-(--color-text-tertiary)">
+                        <p className="text-xs text-[var(--color-text-tertiary)]">
                             Current: <span className="font-semibold" style={{ color: accent }}>■</span>
                         </p>
                     </div>

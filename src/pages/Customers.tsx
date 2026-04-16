@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useMemo } from 'react';
 import {
-    Search, Filter, MoreVertical, Mail, Phone,
+    Search, MoreVertical, Mail, Phone,
     ShoppingBag, TrendingUp, Users, UserCheck,
-    ChevronDown, ArrowUpRight, ArrowDownRight,
+    ArrowUpRight, ArrowDownRight,
     Star, MapPin, Calendar, X, Eye, Ban, RefreshCw
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
@@ -37,15 +37,15 @@ const MOCK_CUSTOMERS: Customer[] = [
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 const tierConfig = {
-    Bronze: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', dot: 'bg-amber-400' },
-    Silver: { bg: 'bg-slate-50', text: 'text-slate-600', border: 'border-slate-200', dot: 'bg-slate-400' },
-    Gold: { bg: 'bg-yellow-50', text: 'text-yellow-700', border: 'border-yellow-200', dot: 'bg-yellow-400' },
-    Platinum: { bg: 'bg-violet-50', text: 'text-violet-700', border: 'border-violet-200', dot: 'bg-violet-400' },
+    Bronze: { bg: 'bg-orange-50/50', text: 'text-orange-700', border: 'border-orange-200/50', dot: 'bg-orange-400' },
+    Silver: { bg: 'bg-slate-50/50', text: 'text-slate-600', border: 'border-slate-200/50', dot: 'bg-slate-400' },
+    Gold: { bg: 'bg-amber-50/50', text: 'text-amber-700', border: 'border-amber-200/50', dot: 'bg-amber-400' },
+    Platinum: { bg: 'bg-indigo-50/50', text: 'text-indigo-700', border: 'border-indigo-200/50', dot: 'bg-indigo-400' },
 };
 const statusConfig = {
-    Active: { bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-400' },
+    Active: { bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500' },
     Inactive: { bg: 'bg-gray-100', text: 'text-gray-500', dot: 'bg-gray-400' },
-    Blocked: { bg: 'bg-red-50', text: 'text-red-600', dot: 'bg-red-400' },
+    Blocked: { bg: 'bg-red-50', text: 'text-red-600', dot: 'bg-red-500' },
 };
 const avatarColors: Record<string, string> = {
     A: 'bg-violet-100 text-violet-700', T: 'bg-blue-100 text-blue-700',
@@ -59,123 +59,112 @@ const fmtDate = (d: string) => new Date(d).toLocaleDateString('en-GB', { day: 'n
 
 // ─── Stat Card ────────────────────────────────────────────────────────────────
 
-const StatCard = ({ label, value, sub, icon: Icon, up }: {
-    label: string; value: string; sub: string; icon: React.ElementType; up: boolean;
-}) => {
-    const { isDark, compactMode } = useTheme();
+const StatCard = ({ label, value, sub, icon: Icon, up }: any) => {
+    const { isDark } = useTheme();
     return (
-        <div className={`rounded-2xl border p-${compactMode ? '4' : '5'} flex items-start justify-between shadow-sm hover:shadow-md transition-shadow
-            ${isDark ? 'bg-[#1a1a1a] border-[#2a2a2a]' : 'bg-white border-gray-100'}`}>
-            <div className="space-y-1">
-                <p className={`text-[10px] font-black uppercase tracking-widest ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>{label}</p>
-                <p className={`text-2xl font-black tracking-tight ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>{value}</p>
-                <div className={`flex items-center gap-1 text-xs font-bold ${up ? 'text-emerald-600' : 'text-red-500'}`}>
-                    {up ? <ArrowUpRight size={13} /> : <ArrowDownRight size={13} />}
-                    <span>{sub}</span>
+        <div className={`group rounded-2xl border p-5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1
+            ${isDark ? 'bg-[#151515] border-white/5' : 'bg-white border-gray-100 shadow-sm'}`}>
+            <div className="flex justify-between items-start">
+                <div className="space-y-3">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">{label}</p>
+                    <h3 className={`text-2xl font-bold tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>{value}</h3>
+                    <div className={`flex items-center gap-1.5 text-xs font-semibold ${up ? 'text-emerald-500' : 'text-rose-500'}`}>
+                        <span className={`p-0.5 rounded-full ${up ? 'bg-emerald-500/10' : 'bg-rose-500/10'}`}>
+                            {up ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
+                        </span>
+                        {sub}
+                    </div>
                 </div>
-            </div>
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white" style={{ backgroundColor: 'var(--accent)' }}>
-                <Icon size={18} />
+                <div className="p-3 rounded-xl bg-[--accent] text-white shadow-inner opacity-90 group-hover:opacity-100 transition-opacity">
+                    <Icon size={20} />
+                </div>
             </div>
         </div>
     );
 };
 
-// ─── Customer Drawer ──────────────────────────────────────────────────────────
+// ─── Customer Modal ───────────────────────────────────────────────────────────
 
-const CustomerDrawer = ({ customer, onClose }: { customer: Customer; onClose: () => void }) => {
+const CustomerModal = ({ customer, onClose }: { customer: Customer; onClose: () => void }) => {
     const { isDark } = useTheme();
     const tier = tierConfig[customer.tier];
     const status = statusConfig[customer.status];
+
     const surface = isDark ? 'bg-[#1a1a1a]' : 'bg-white';
-    const borderColor = isDark ? 'border-[#2a2a2a]' : 'border-gray-100';
+    const borderColor = isDark ? 'border-white/10' : 'border-gray-100';
     const bodyText = isDark ? 'text-gray-100' : 'text-gray-900';
-    const subText = isDark ? 'text-gray-500' : 'text-gray-500';
+    const subText = isDark ? 'text-gray-500' : 'text-gray-400';
 
     return (
-        <div className="fixed inset-0 z-50 flex justify-end">
-            <div className={`absolute inset-0 ${isDark ? 'bg-black/50' : 'bg-black/20'} backdrop-blur-sm`} onClick={onClose} />
-            <div className={`relative w-full max-w-sm ${surface} h-full shadow-2xl flex flex-col`}
-                style={{ animation: 'slideIn 0.25s ease-out' }}>
-                <style>{`@keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }`}</style>
-
-                <div className={`p-6 border-b flex items-center justify-between ${borderColor}`}>
-                    <p className={`text-[10px] font-black uppercase tracking-widest ${subText}`}>Customer Profile</p>
-                    <button onClick={onClose} className={`w-8 h-8 rounded-full flex items-center justify-center transition ${isDark ? 'bg-[#222] hover:bg-[#333]' : 'bg-gray-100 hover:bg-gray-200'}`}>
-                        <X size={14} />
+        <div className="fixed inset-0 z-50 flex items-center justify-center ">
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-md" onClick={onClose} />
+            <div className={`relative w-full max-w-2xl ${surface} border ${borderColor} rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200`}>
+                <div className={`p-6 border-b ${borderColor} flex items-center justify-between`}>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Member Dossier</p>
+                    <button onClick={onClose} className={`w-8 h-8 rounded-full flex items-center justify-center transition ${isDark ? 'bg-white/5 hover:bg-white/10' : 'bg-gray-100 hover:bg-gray-200'}`}>
+                        <X size={14} className={bodyText} />
                     </button>
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                    <div className="flex flex-col items-center text-center gap-3">
-                        <div className={`w-20 h-20 rounded-3xl flex items-center justify-center text-2xl font-black ${getAvatarColor(customer.avatar)}`}>
+                <div className="p-8 space-y-8">
+                    <div className="flex flex-col items-center text-center gap-4">
+                        <div className={`w-24 h-24 rounded-3xl flex items-center justify-center text-3xl font-bold shadow-xl ${getAvatarColor(customer.avatar)}`}>
                             {customer.avatar}
                         </div>
                         <div>
-                            <h2 className={`text-xl font-black ${bodyText}`}>{customer.name}</h2>
-                            <div className="flex items-center justify-center gap-1 mt-1">
+                            <h2 className={`text-2xl font-bold ${bodyText}`}>{customer.name}</h2>
+                            <div className="flex items-center justify-center gap-1.5 mt-2">
                                 {[...Array(5)].map((_, i) => (
-                                    <Star key={i} size={11} className={i < Math.floor(customer.rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200 fill-gray-200'} />
+                                    <Star key={i} size={12} className={i < Math.floor(customer.rating) ? 'text-amber-400 fill-amber-400' : 'text-gray-200 fill-gray-200'} />
                                 ))}
                                 <span className={`text-xs ml-1 font-bold ${subText}`}>{customer.rating}</span>
                             </div>
                         </div>
-                        <div className="flex gap-2 flex-wrap justify-center">
-                            <span className={`px-3 py-1 rounded-full text-[10px] font-black border ${tier.bg} ${tier.text} ${tier.border}`}>
-                                <span className={`inline-block w-1.5 h-1.5 rounded-full mr-1.5 ${tier.dot}`} />
+                        <div className="flex gap-2">
+                            <span className={`px-4 py-1.5 rounded-full text-[10px] font-bold border ${tier.bg} ${tier.text} ${tier.border}`}>
                                 {customer.tier}
                             </span>
-                            <span className={`px-3 py-1 rounded-full text-[10px] font-black ${status.bg} ${status.text}`}>
-                                <span className={`inline-block w-1.5 h-1.5 rounded-full mr-1.5 ${status.dot}`} />
+                            <span className={`px-4 py-1.5 rounded-full text-[10px] font-bold ${status.bg} ${status.text}`}>
                                 {customer.status}
                             </span>
                         </div>
                     </div>
 
-                    <div className="space-y-2">
-                        <p className={`text-[10px] font-black uppercase tracking-widest ${subText}`}>Contact Info</p>
-                        <div className="space-y-2">
-                            {[
-                                { icon: Mail, val: customer.email },
-                                { icon: Phone, val: customer.phone },
-                                { icon: MapPin, val: customer.location },
-                                { icon: Calendar, val: `Joined ${fmtDate(customer.joinDate)}` },
-                            ].map(({ icon: Icon, val }) => (
-                                <div key={val} className={`flex items-center gap-3 p-3 rounded-xl ${isDark ? 'bg-[#111]' : 'bg-gray-50'}`}>
-                                    <Icon size={14} className={subText} />
-                                    <span className={`text-sm font-medium truncate ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{val}</span>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {[
+                            { icon: Mail, label: 'Email Address', val: customer.email },
+                            { icon: Phone, label: 'Phone Number', val: customer.phone },
+                            { icon: MapPin, label: 'Primary Location', val: customer.location },
+                            { icon: Calendar, label: 'Membership Date', val: fmtDate(customer.joinDate) },
+                        ].map(({ icon: Icon, label, val }) => (
+                            <div key={label} className={`p-4 rounded-2xl border ${borderColor} ${isDark ? 'bg-white/5' : 'bg-gray-50'}`}>
+                                <p className="text-[9px] font-bold text-gray-500 uppercase tracking-tighter mb-1">{label}</p>
+                                <div className="flex items-center gap-2">
+                                    <Icon size={14} className="text-[--accent]" />
+                                    <span className={`text-sm font-semibold truncate ${bodyText}`}>{val}</span>
                                 </div>
-                            ))}
-                        </div>
+                            </div>
+                        ))}
                     </div>
 
-                    <div className="space-y-2">
-                        <p className={`text-[10px] font-black uppercase tracking-widest ${subText}`}>Purchase Stats</p>
-                        <div className="grid grid-cols-2 gap-3">
-                            <div className="rounded-2xl p-4 text-white text-center" style={{ backgroundColor: 'var(--accent)' }}>
-                                <p className="text-2xl font-black">{customer.totalOrders}</p>
-                                <p className="text-[10px] font-bold text-white/70 mt-1">TOTAL ORDERS</p>
-                            </div>
-                            <div className="rounded-2xl p-4 text-white text-center" style={{ backgroundColor: 'var(--accent)', opacity: 0.85 }}>
-                                <p className="text-lg font-black">{fmt(customer.totalSpent)}</p>
-                                <p className="text-[10px] font-bold text-white/70 mt-1">TOTAL SPENT</p>
-                            </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="rounded-2xl p-6 text-white text-center bg-[--accent]">
+                            <p className="text-3xl font-bold">{customer.totalOrders}</p>
+                            <p className="text-[10px] font-bold opacity-70 mt-1 uppercase">Total Activities</p>
                         </div>
-                        <div className={`p-3 rounded-xl flex items-center justify-between ${isDark ? 'bg-[#111]' : 'bg-gray-50'}`}>
-                            <span className={`text-xs font-medium ${subText}`}>Last order</span>
-                            <span className={`text-xs font-black ${bodyText}`}>{fmtDate(customer.lastOrder)}</span>
+                        <div className={`rounded-2xl p-6 text-center border ${borderColor} ${isDark ? 'bg-white/5' : 'bg-gray-50'}`}>
+                            <p className={`text-2xl font-bold ${bodyText}`}>{fmt(customer.totalSpent)}</p>
+                            <p className="text-[10px] font-bold text-gray-500 mt-1 uppercase">Net Investment</p>
                         </div>
                     </div>
                 </div>
 
-                <div className={`p-6 border-t grid grid-cols-2 gap-3 ${borderColor}`}>
-                    <button className={`py-3 rounded-2xl border text-sm font-bold transition flex items-center justify-center gap-2
-                        ${isDark ? 'border-[#333] text-gray-400 hover:bg-[#222]' : 'border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
-                        <Mail size={14} /> Email
+                <div className={`p-6 border-t ${borderColor} flex gap-3`}>
+                    <button className={`flex-1 py-3 rounded-xl border text-sm font-bold transition flex items-center justify-center gap-2 ${borderColor} ${bodyText} ${isDark ? 'hover:bg-white/5' : 'hover:bg-gray-50'}`}>
+                        <Mail size={14} /> Send Message
                     </button>
-                    <button className="py-3 rounded-2xl text-white text-sm font-bold transition flex items-center justify-center gap-2 hover:opacity-90"
-                        style={{ backgroundColor: 'var(--accent)' }}>
-                        <ShoppingBag size={14} /> Orders
+                    <button className="flex-1 py-3 rounded-xl text-white text-sm font-bold transition flex items-center justify-center gap-2 bg-[--accent] hover:opacity-90">
+                        <ShoppingBag size={14} /> View History
                     </button>
                 </div>
             </div>
@@ -185,31 +174,31 @@ const CustomerDrawer = ({ customer, onClose }: { customer: Customer; onClose: ()
 
 // ─── Row Action Menu ───────────────────────────────────────────────────────────
 
-const ActionMenu = ({ onView, onBlock, onReset }: { onView: () => void; onBlock: () => void; onReset: () => void; }) => {
+const ActionMenu = ({ onView, onBlock, onReset }: any) => {
     const { isDark } = useTheme();
     const [open, setOpen] = useState(false);
     return (
         <div className="relative">
             <button onClick={() => setOpen(o => !o)}
-                className={`w-8 h-8 rounded-xl flex items-center justify-center transition ${isDark ? 'hover:bg-[#333]' : 'hover:bg-gray-100'}`}>
-                <MoreVertical size={15} className={isDark ? 'text-gray-500' : 'text-gray-400'} />
+                className={`w-8 h-8 rounded-lg flex items-center justify-center transition ${isDark ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}>
+                <MoreVertical size={16} className={isDark ? 'text-gray-500' : 'text-gray-400'} />
             </button>
             {open && (
                 <>
                     <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-                    <div className={`absolute right-0 top-9 z-20 border rounded-2xl shadow-xl py-2 w-40 text-sm ${isDark ? 'bg-[#1a1a1a] border-[#333]' : 'bg-white border-gray-100'}`}>
+                    <div className={`absolute right-0 top-10 z-20 border rounded-xl shadow-xl py-2 w-44 text-sm animate-in fade-in slide-in-from-top-2 duration-200 ${isDark ? 'bg-[#1a1a1a] border-white/10 shadow-black' : 'bg-white border-gray-100'}`}>
                         <button onClick={() => { onView(); setOpen(false); }}
-                            className={`w-full px-4 py-2 text-left flex items-center gap-2 font-medium ${isDark ? 'text-gray-300 hover:bg-[#222]' : 'text-gray-700 hover:bg-gray-50'}`}>
-                            <Eye size={13} /> View Profile
+                            className={`w-full px-4 py-2.5 text-left flex items-center gap-3 font-semibold ${isDark ? 'text-gray-300 hover:bg-white/5' : 'text-gray-700 hover:bg-gray-50'}`}>
+                            <Eye size={14} className="text-blue-500" /> Member Profile
                         </button>
                         <button onClick={() => { onReset(); setOpen(false); }}
-                            className={`w-full px-4 py-2 text-left flex items-center gap-2 font-medium ${isDark ? 'text-gray-300 hover:bg-[#222]' : 'text-gray-700 hover:bg-gray-50'}`}>
-                            <RefreshCw size={13} /> Reset Status
+                            className={`w-full px-4 py-2.5 text-left flex items-center gap-3 font-semibold ${isDark ? 'text-gray-300 hover:bg-white/5' : 'text-gray-700 hover:bg-gray-50'}`}>
+                            <RefreshCw size={14} className="text-emerald-500" /> Restore Status
                         </button>
-                        <div className={`my-1 border-t ${isDark ? 'border-[#333]' : 'border-gray-100'}`} />
+                        <div className={`my-1 border-t ${isDark ? 'border-white/5' : 'border-gray-100'}`} />
                         <button onClick={() => { onBlock(); setOpen(false); }}
-                            className="w-full px-4 py-2 text-left flex items-center gap-2 hover:bg-red-50 text-red-500 font-medium">
-                            <Ban size={13} /> Block
+                            className="w-full px-4 py-2.5 text-left flex items-center gap-3 hover:bg-red-50 text-red-500 font-semibold">
+                            <Ban size={14} /> Blacklist
                         </button>
                     </div>
                 </>
@@ -221,28 +210,13 @@ const ActionMenu = ({ onView, onBlock, onReset }: { onView: () => void; onBlock:
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 const Customers: React.FC = () => {
-    const { isDark, compactMode } = useTheme();
+    const { isDark } = useTheme();
     const [customers, setCustomers] = useState<Customer[]>(MOCK_CUSTOMERS);
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState('All');
     const [tierFilter, setTierFilter] = useState('All');
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
     const [sortKey, setSortKey] = useState<'totalSpent' | 'totalOrders' | 'lastOrder'>('totalSpent');
-
-    // Theme tokens
-    const surface = isDark ? 'bg-[#1a1a1a] border-[#2a2a2a]' : 'bg-white border-gray-100';
-    const inputCls = `w-full border rounded-xl text-sm outline-none transition-all focus:ring-2 focus:ring-[--accent]
-        ${isDark ? 'bg-[#111] border-[#333] text-gray-100 placeholder:text-gray-600 focus:bg-[#1a1a1a]' : 'bg-gray-50 border-gray-200 text-gray-800 focus:bg-white'}`;
-    const selectCls = `border rounded-xl text-sm outline-none appearance-none cursor-pointer focus:ring-2 focus:ring-[--accent]
-        ${isDark ? 'bg-[#111] border-[#333] text-gray-300' : 'bg-gray-50 border-gray-200 text-gray-700'}`;
-    const bodyText = isDark ? 'text-gray-100' : 'text-gray-900';
-    const subText = isDark ? 'text-gray-500' : 'text-gray-400';
-    const headText = isDark ? 'text-gray-500' : 'text-gray-400';
-    const rowHover = isDark ? 'hover:bg-[#222]' : 'hover:bg-gray-50/60';
-    const divideColor = isDark ? 'divide-[#2a2a2a]' : 'divide-gray-50';
-    const borderColor = isDark ? 'border-[#2a2a2a]' : 'border-gray-100';
-    const px = compactMode ? 'px-4' : 'px-5';
-    const cellPy = compactMode ? 'py-3' : 'py-4';
 
     const filtered = useMemo(() => {
         return customers
@@ -252,7 +226,7 @@ const Customers: React.FC = () => {
             })
             .filter(c => statusFilter === 'All' || c.status === statusFilter)
             .filter(c => tierFilter === 'All' || c.tier === tierFilter)
-            .sort((a, b) => sortKey === 'lastOrder' ? b.lastOrder.localeCompare(a.lastOrder) : b[sortKey] - a[sortKey]);
+            .sort((a: any, b: any) => sortKey === 'lastOrder' ? b.lastOrder.localeCompare(a.lastOrder) : b[sortKey] - a[sortKey]);
     }, [customers, search, statusFilter, tierFilter, sortKey]);
 
     const stats = useMemo(() => ({
@@ -265,163 +239,145 @@ const Customers: React.FC = () => {
     const handleBlock = (id: number) => setCustomers(prev => prev.map(c => c.id === id ? { ...c, status: 'Blocked' } : c));
     const handleReset = (id: number) => setCustomers(prev => prev.map(c => c.id === id ? { ...c, status: 'Active' } : c));
 
+    const surfaceCls = isDark ? 'bg-[#151515] border-white/5' : 'bg-white border-gray-100 shadow-sm';
+    const textMain = isDark ? 'text-gray-100' : 'text-gray-900';
+    const textSub = isDark ? 'text-gray-400' : 'text-gray-500';
+
     return (
-        <div className={`min-h-screen space-y-6 ${isDark ? 'bg-[#0d0d0d] text-gray-100' : 'bg-gray-50/50'}`}>
+        <div className={`space-y-8`}>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <StatCard label="Total Customers" value={stats.total.toString()} sub="+12% this month" icon={Users} up={true} />
-                <StatCard label="Active Customers" value={stats.active.toString()} sub="+5% this month" icon={UserCheck} up={true} />
-                <StatCard label="Total Revenue" value={fmt(stats.revenue)} sub="+18% this month" icon={TrendingUp} up={true} />
-                <StatCard label="Avg. Order Value" value={fmt(stats.avgOrder)} sub="-2% this month" icon={ShoppingBag} up={false} />
-            </div>
+            <header className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <StatCard label="Total Members" value={stats.total.toString()} sub="+12% this month" icon={Users} up={true} />
+                <StatCard label="Active Clients" value={stats.active.toString()} sub="+5% this month" icon={UserCheck} up={true} />
+                <StatCard label="Net Portfolio" value={fmt(stats.revenue)} sub="+18% this month" icon={TrendingUp} up={true} />
+                <StatCard label="Avg. Investment" value={fmt(stats.avgOrder)} sub="-2% this month" icon={ShoppingBag} up={false} />
+            </header>
 
-            {/* Filters */}
-            <div className={`rounded-2xl border p-4 shadow-sm flex flex-wrap gap-3 items-center ${surface}`}>
-                <div className="flex-1 min-w-48 relative">
-                    <Search size={14} className={`absolute left-3 top-1/2 -translate-y-1/2 ${subText}`} />
-                    <input type="text" placeholder="Search name, email, city..."
-                        value={search} onChange={e => setSearch(e.target.value)}
-                        className={`${inputCls} pl-9 pr-4 py-2.5`} />
+            {/* Controls */}
+            <div className={`flex flex-wrap items-center gap-4 p-4 rounded-2xl border ${surfaceCls}`}>
+                <div className="flex-1 min-w-70 relative group">
+                    <Search size={16} className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${textSub} group-focus-within:text-[--accent]`} />
+                    <input type="text" placeholder="Search members..." value={search} onChange={e => setSearch(e.target.value)}
+                        className={`w-full pl-11 pr-4 py-2.5 rounded-xl border outline-none transition-all text-sm
+                            ${isDark ? 'bg-[#0d0d0d] border-white/10 focus:border-[--accent]/50 text-white' : 'bg-gray-50 border-gray-200 focus:bg-white focus:ring-4 focus:ring-[--accent]/5 text-gray-800'}`} />
                 </div>
-                <div className="relative">
-                    <Filter size={12} className={`absolute left-3 top-1/2 -translate-y-1/2 ${subText}`} />
+                <div className="flex flex-wrap gap-2">
                     <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
-                        className={`${selectCls} pl-8 pr-8 py-2.5`}>
+                        className={`px-4 py-2.5 rounded-xl border text-sm font-semibold outline-none cursor-pointer ${isDark ? 'bg-[#0d0d0d] border-white/10 text-gray-300' : 'bg-gray-50 border-gray-200 text-gray-700'}`}>
                         <option value="All">All Status</option>
                         <option value="Active">Active</option>
                         <option value="Inactive">Inactive</option>
                         <option value="Blocked">Blocked</option>
                     </select>
-                    <ChevronDown size={12} className={`absolute right-3 top-1/2 -translate-y-1/2 ${subText} pointer-events-none`} />
-                </div>
-                <div className="relative">
                     <select value={tierFilter} onChange={e => setTierFilter(e.target.value)}
-                        className={`${selectCls} pl-4 pr-8 py-2.5`}>
+                        className={`px-4 py-2.5 rounded-xl border text-sm font-semibold outline-none cursor-pointer ${isDark ? 'bg-[#0d0d0d] border-white/10 text-gray-300' : 'bg-gray-50 border-gray-200 text-gray-700'}`}>
                         <option value="All">All Tiers</option>
                         <option value="Bronze">Bronze</option>
                         <option value="Silver">Silver</option>
                         <option value="Gold">Gold</option>
                         <option value="Platinum">Platinum</option>
                     </select>
-                    <ChevronDown size={12} className={`absolute right-3 top-1/2 -translate-y-1/2 ${subText} pointer-events-none`} />
-                </div>
-                <div className="relative">
                     <select value={sortKey} onChange={e => setSortKey(e.target.value as any)}
-                        className={`${selectCls} pl-4 pr-8 py-2.5`}>
-                        <option value="totalSpent">Sort: Spent</option>
-                        <option value="totalOrders">Sort: Orders</option>
-                        <option value="lastOrder">Sort: Recent</option>
+                        className={`px-4 py-2.5 rounded-xl border text-sm font-semibold outline-none cursor-pointer ${isDark ? 'bg-[#0d0d0d] border-white/10 text-gray-300' : 'bg-gray-50 border-gray-200 text-gray-700'}`}>
+                        <option value="totalSpent">Sort: Value</option>
+                        <option value="totalOrders">Sort: Activity</option>
+                        <option value="lastOrder">Sort: Recency</option>
                     </select>
-                    <ChevronDown size={12} className={`absolute right-3 top-1/2 -translate-y-1/2 ${subText} pointer-events-none`} />
                 </div>
             </div>
 
             {/* Table */}
-            <div className={`rounded-2xl border shadow-sm overflow-hidden ${surface}`}>
+            <div className={`rounded-2xl border overflow-hidden ${surfaceCls}`}>
                 <div className="overflow-x-auto">
-                    <table className="w-full">
+                    <table className="w-full text-left">
                         <thead>
-                            <tr className={`border-b ${borderColor} ${isDark ? 'bg-[#111]' : ''}`}>
-                                {['Customer', 'Contact', 'Location', 'Status', 'Tier', 'Orders', 'Spent', 'Last Order', ''].map(h => (
-                                    <th key={h} className={`${px} py-4 text-left text-[10px] font-black uppercase tracking-widest ${headText}`}>{h}</th>
-                                ))}
+                            <tr className={`border-b ${isDark ? 'border-white/5 bg-white/5' : 'border-gray-100 bg-gray-50/50'}`}>
+                                <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-gray-500">Member</th>
+                                <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-gray-500">Contact</th>
+                                <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-gray-500">Location</th>
+                                <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-gray-500">Status</th>
+                                <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-gray-500">Tier</th>
+                                <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-gray-500 text-right">Investment</th>
+                                <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-gray-500"></th>
                             </tr>
                         </thead>
-                        <tbody className={`${divideColor} divide-y`}>
+                        <tbody className={`divide-y ${isDark ? 'divide-white/5' : 'divide-gray-50'}`}>
                             {filtered.length === 0 ? (
-                                <tr><td colSpan={9} className="px-5 py-16 text-center">
-                                    <div className="flex flex-col items-center gap-2">
-                                        <Users size={32} className={isDark ? 'text-gray-700' : 'text-gray-200'} />
-                                        <p className={`text-sm font-bold ${subText}`}>No customers found</p>
-                                    </div>
-                                </td></tr>
-                            ) : filtered.map(c => {
-                                const tier = tierConfig[c.tier];
-                                const status = statusConfig[c.status];
-                                return (
-                                    <tr key={c.id} className={`${rowHover} transition-colors group`}>
-                                        {/* Customer */}
-                                        <td className={`${px} ${cellPy}`}>
-                                            <div className="flex items-center gap-3">
-                                                <div className={`${compactMode ? 'w-8 h-8' : 'w-9 h-9'} rounded-2xl flex items-center justify-center text-xs font-black shrink-0 ${getAvatarColor(c.avatar)}`}>
-                                                    {c.avatar}
-                                                </div>
-                                                <div>
-                                                    <p className={`text-sm font-bold ${bodyText}`}>{c.name}</p>
-                                                    <div className="flex items-center gap-1 mt-0.5">
-                                                        {[...Array(5)].map((_, i) => (
-                                                            <Star key={i} size={9} className={i < Math.floor(c.rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200 fill-gray-200'} />
-                                                        ))}
-                                                    </div>
+                                <tr>
+                                    <td colSpan={7} className="px-6 py-20 text-center">
+                                        <div className="flex flex-col items-center gap-3">
+                                            <Users size={40} className="text-gray-300 opacity-50" />
+                                            <p className={`text-sm font-semibold ${textSub}`}>No members found matching your criteria</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ) : filtered.map(c => (
+                                <tr key={c.id} className={`group transition-colors ${isDark ? 'hover:bg-white/5' : 'hover:bg-blue-50/30'}`}>
+                                    <td className="px-6 py-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-bold shadow-sm ${getAvatarColor(c.avatar)}`}>
+                                                {c.avatar}
+                                            </div>
+                                            <div>
+                                                <p className={`text-sm font-bold ${textMain}`}>{c.name}</p>
+                                                <div className="flex items-center gap-1 mt-0.5">
+                                                    {[...Array(5)].map((_, i) => (
+                                                        <Star key={i} size={10} className={i < Math.floor(c.rating) ? 'text-amber-400 fill-amber-400' : 'text-gray-200 fill-gray-200'} />
+                                                    ))}
                                                 </div>
                                             </div>
-                                        </td>
-                                        {/* Contact */}
-                                        <td className={`${px} ${cellPy}`}>
-                                            <p className={`text-xs font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{c.email}</p>
-                                            <p className={`text-xs mt-0.5 ${subText}`}>{c.phone}</p>
-                                        </td>
-                                        {/* Location */}
-                                        <td className={`${px} ${cellPy}`}>
-                                            <div className="flex items-center gap-1.5">
-                                                <MapPin size={11} className={subText} />
-                                                <span className={`text-xs font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{c.location}</span>
-                                            </div>
-                                        </td>
-                                        {/* Status */}
-                                        <td className={`${px} ${cellPy}`}>
-                                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black ${status.bg} ${status.text}`}>
-                                                <span className={`w-1.5 h-1.5 rounded-full ${status.dot}`} />
-                                                {c.status}
-                                            </span>
-                                        </td>
-                                        {/* Tier */}
-                                        <td className={`${px} ${cellPy}`}>
-                                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black border ${tier.bg} ${tier.text} ${tier.border}`}>
-                                                <span className={`w-1.5 h-1.5 rounded-full ${tier.dot}`} />
-                                                {c.tier}
-                                            </span>
-                                        </td>
-                                        {/* Orders */}
-                                        <td className={`${px} ${cellPy}`}>
-                                            <span className={`text-sm font-black ${bodyText}`}>{c.totalOrders}</span>
-                                        </td>
-                                        {/* Spent */}
-                                        <td className={`${px} ${cellPy}`}>
-                                            <span className={`text-sm font-black ${bodyText}`}>{fmt(c.totalSpent)}</span>
-                                        </td>
-                                        {/* Last Order */}
-                                        <td className={`${px} ${cellPy}`}>
-                                            <span className={`text-xs font-medium ${subText}`}>{fmtDate(c.lastOrder)}</span>
-                                        </td>
-                                        {/* Actions */}
-                                        <td className={`${px} ${cellPy}`}>
-                                            <ActionMenu
-                                                onView={() => setSelectedCustomer(c)}
-                                                onBlock={() => handleBlock(c.id)}
-                                                onReset={() => handleReset(c.id)}
-                                            />
-                                        </td>
-                                    </tr>
-                                );
-                            })}
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <p className={`text-xs font-semibold ${textMain}`}>{c.email}</p>
+                                        <p className={`text-[10px] mt-0.5 ${textSub}`}>{c.phone}</p>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <div className="flex items-center gap-1.5">
+                                            <MapPin size={12} className="text-[--accent]" />
+                                            <span className={`text-xs font-semibold ${textMain}`}>{c.location}</span>
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold ${statusConfig[c.status].bg} ${statusConfig[c.status].text}`}>
+                                            <span className={`w-1.5 h-1.5 rounded-full ${statusConfig[c.status].dot}`} />
+                                            {c.status.toUpperCase()}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span className={`inline-flex items-center px-3 py-1 rounded-lg border text-[10px] font-bold ${tierConfig[c.tier].bg} ${tierConfig[c.tier].text} ${tierConfig[c.tier].border}`}>
+                                            {c.tier.toUpperCase()}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4 text-right tabular-nums">
+                                        <span className={`text-sm font-bold ${textMain}`}>{fmt(c.totalSpent)}</span>
+                                        <p className={`text-[10px] ${textSub}`}>{c.totalOrders} activities</p>
+                                    </td>
+                                    <td className="px-6 py-4 text-right">
+                                        <ActionMenu
+                                            onView={() => setSelectedCustomer(c)}
+                                            onBlock={() => handleBlock(c.id)}
+                                            onReset={() => handleReset(c.id)}
+                                        />
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
 
                 {/* Footer */}
-                <div className={`px-5 py-4 border-t flex items-center justify-between ${borderColor}`}>
-                    <p className={`text-xs font-medium ${subText}`}>
-                        Showing <span className={`font-black ${bodyText}`}>{filtered.length}</span> of <span className={`font-black ${bodyText}`}>{customers.length}</span> customers
+                <div className={`px-6 py-4 border-t flex items-center justify-between ${isDark ? 'border-white/5' : 'border-gray-100'}`}>
+                    <p className={`text-xs font-semibold ${textSub}`}>
+                        Showing <span className={textMain}>{filtered.length}</span> members
                     </p>
-                    <div className="flex gap-1">
-                        {['Bronze', 'Silver', 'Gold', 'Platinum'].map(t => {
+                    <div className="flex gap-2">
+                        {['Gold', 'Platinum'].map(t => {
                             const count = filtered.filter(c => c.tier === t).length;
                             if (!count) return null;
-                            const cfg = tierConfig[t as keyof typeof tierConfig];
                             return (
-                                <span key={t} className={`px-2 py-0.5 rounded-full text-[10px] font-black border ${cfg.bg} ${cfg.text} ${cfg.border}`}>
+                                <span key={t} className={`px-3 py-1 rounded-lg text-[10px] font-bold border ${tierConfig[t as keyof typeof tierConfig].bg} ${tierConfig[t as keyof typeof tierConfig].text} ${tierConfig[t as keyof typeof tierConfig].border}`}>
                                     {count} {t}
                                 </span>
                             );
@@ -430,9 +386,9 @@ const Customers: React.FC = () => {
                 </div>
             </div>
 
-            {/* Drawer */}
+            {/* Modal */}
             {selectedCustomer && (
-                <CustomerDrawer customer={selectedCustomer} onClose={() => setSelectedCustomer(null)} />
+                <CustomerModal customer={selectedCustomer} onClose={() => setSelectedCustomer(null)} />
             )}
         </div>
     );

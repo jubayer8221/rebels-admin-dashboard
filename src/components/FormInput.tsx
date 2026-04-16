@@ -80,7 +80,7 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
                         className={`
                             text-sm
                             font-medium
-                            text-(--color-text-primary)
+                            text-[var(--color-text-primary)]
                             ${disabled ? 'opacity-50' : ''}
                         `}
                     >
@@ -95,26 +95,26 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
                         ${getPaddingX('sm')}
                         ${getPaddingY('xs')}
                         text-base
-                        bg-(--color-bg-primary)
-                        text-(--color-text-primary)
-                        placeholder-(--color-text-tertiary)
+                        bg-[var(--color-bg-primary)]
+                        text-[var(--color-text-primary)]
+                        placeholder:text-[var(--color-text-tertiary)]
                         border-2
                         rounded-md
                         transition-all
                         duration-fast
                         
                         ${error
-                            ? 'border-(--color-error)'
-                            : 'border-(--color-border)'
+                            ? 'border-[var(--color-error)]'
+                            : 'border-[var(--color-border)]'
                         }
                         
                         focus:outline-none
-                        focus:border-(--color-primary)
+                        focus:border-[var(--color-primary)]
                         focus:ring-4
-                        focus:ring-(--color-primary-light)
+                        focus:ring-[var(--color-primary-light)]
                         
-                        disabled:bg-(--color-bg-secondary)
-                        disabled:text-(--color-text-disabled)
+                        disabled:bg-[var(--color-bg-secondary)]
+                        disabled:text-[var(--color-text-disabled)]
                         disabled:cursor-not-allowed
                         
                         ${className}
@@ -123,13 +123,13 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
                 />
 
                 {error && (
-                    <p className="text-xs font-medium text-(--color-error)">
+                    <p className="text-xs font-medium text-[var(--color-error)]">
                         {error}
                     </p>
                 )}
 
                 {!error && helperText && (
-                    <p className="text-xs text-(--color-text-tertiary)">
+                    <p className="text-xs text-[var(--color-text-tertiary)]">
                         {helperText}
                     </p>
                 )}
