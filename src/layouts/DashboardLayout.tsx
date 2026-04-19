@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
 import { getPadding } from '../utils/designTokens';
@@ -8,17 +8,16 @@ interface LayoutProps {
 }
 
 const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
+    const [sidebarOpen, setSidebarOpen] = useState(true);
+
     return (
-        <div className="flex min-h-screen bg-[var(--color-bg-secondary)]">
-            {/* Sidebar: Fixed position usually handled inside its own component */}
-            <Sidebar />
+        <div className="h-screen flex flex-col lg:flex-row bg-(--color-bg-secondary)">
+            <Sidebar mobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-            <div className="flex-1 flex flex-col">
-                {/* Navbar: Sticky or Static at the top */}
-                <Navbar />
+            <div className="flex-1 flex flex-col overflow-hidden">
+                <Navbar onSidebarToggle={() => setSidebarOpen(o => !o)} mobileOpen={sidebarOpen} />
 
-                {/* Main Content Area */}
-                <main className={getPadding('md')}>
+                <main className={`flex-1 overflow-y-auto ${getPadding('md')}`}>
                     <div className="max-w-full mx-auto animate-in fade-in duration-500">
                         {children}
                     </div>

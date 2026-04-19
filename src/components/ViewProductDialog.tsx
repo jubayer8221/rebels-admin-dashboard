@@ -25,7 +25,7 @@ const ViewProductDialog = ({ item, onClose }: Props) => {
                     initial={{ scale: 0.95, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{ scale: 0.95, opacity: 0 }}
-                    className="relative bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden"
+                    className="relative w-full max-w-full sm:max-w-xl max-h-[calc(100vh-3rem)] overflow-hidden rounded-3xl bg-white shadow-2xl"
                 >
                     <button
                         onClick={onClose}

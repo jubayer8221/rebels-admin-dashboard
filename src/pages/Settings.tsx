@@ -677,21 +677,21 @@ const Settings: React.FC = () => {
 
     return (
         <div className={`min-h-screen ${isDark ? 'bg-[#0d0d0d]' : 'bg-gray-50/50'}`}>
-            <div className={`flex ${getGap('lg')} items-start`}>
+            <div className={`mx-auto flex w-full flex-col    lg:flex-row lg:items-start  ${getGap('lg')}`}>
                 {/* Sidebar Nav */}
-                <aside className={`w-56 shrink-0 rounded-2xl border shadow-sm ${getPadding('md')} ${getGap('sm')} sticky top-6 ${isDark ? 'bg-[#1a1a1a] border-[#2a2a2a]' : 'bg-white border-gray-100'}`}>
+                <aside className={`w-full rounded-2xl border shadow-sm ${getPadding('md')} ${getGap('sm')} ${isDark ? 'bg-[#1a1a1a] border-[#2a2a2a]' : 'bg-white border-gray-100'} lg:w-56 lg:shrink-0 lg:sticky lg:top-1`}>
                     {nav.map(n => (
                         <NavItem key={n.id} {...n} active={activeSection === n.id} onClick={() => setActiveSection(n.id)} />
                     ))}
                 </aside>
 
                 {/* Content Panel */}
-                <main className={`flex-1 rounded-2xl border shadow-sm ${isDark ? 'bg-[#1a1a1a] border-[#2a2a2a]' : 'bg-white border-gray-100'}`}>
-                    <div className={`${getPaddingX('xl')} ${getPaddingY('lg')} border-b ${isDark ? 'border-[#2a2a2a]' : 'border-gray-100'}`}>
+                <main className={`w-full rounded-2xl border shadow-sm ${isDark ? 'bg-[#1a1a1a] border-[#2a2a2a]' : 'bg-white border-gray-100'}`}>
+                    <div className={`${getPadding('md')} border-b ${isDark ? 'border-[#2a2a2a]' : 'border-gray-100'}`}>
                         <h2 className={`text-lg font-black ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>{title}</h2>
                         <p className={`text-xs font-medium mt-0.5 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>{desc}</p>
                     </div>
-                    <div className={`${getPaddingX('xl')} ${getPaddingY('lg')} ${getGap('lg')}`}>
+                    <div className={`${getPadding('md')} ${getGap('lg')}`}>
                         {sections[activeSection]}
                     </div>
                 </main>

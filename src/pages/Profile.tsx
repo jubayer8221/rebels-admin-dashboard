@@ -14,17 +14,16 @@ import {
 } from 'lucide-react';
 import { useAppDispatch } from '../store/hooks';
 import { logout } from '../features/auth/authSlice';
-import { getPaddingY, getGap } from '../utils/designTokens';
+import { getGap } from '../utils/designTokens';
 
 export const Profile = () => {
-    // This would typically come from your Auth context or Redux store
     const user = {
-        name: "Jubayer Al Mahmud",
-        role: "Junior Software Engineer",
-        email: "jubayer.dev@example.com",
-        joined: "March 2026",
-        status: "Active",
-        company: "Turtle Solutions Limited"
+        name: 'Jubayer Al Mahmud',
+        role: 'Junior Software Engineer',
+        email: 'jubayer.dev@example.com',
+        joined: 'March 2026',
+        status: 'Active',
+        company: 'Turtle Solutions Limited',
     };
 
     const dispatch = useAppDispatch();
@@ -42,144 +41,145 @@ export const Profile = () => {
 
     return (
         <div className="min-h-screen bg-(--color-bg-secondary) text-(--color-text-primary)">
-            <div className={`min-w-full mx-auto ${getGap('lg')} ${getPaddingY('lg')}`}>
+            <div className={`mx-auto max-w-screen ${getGap('lg')}`}>
                 {statusMessage && (
-                    <div className="mb-(--spacing-6) rounded-xl border border-(--color-border) bg-(--color-bg-primary)var(--spacing-4)] py-(--spacing-3)-text-(--color-text-secondary)ow-[var(--shadow-xs)]">
+                    <div className="mb-6 rounded-3xl border border-(--color-border) bg-(--color-bg-primary) p-4 text-(--color-text-secondary) shadow-sm">
                         {statusMessage}
                     </div>
                 )}
 
-                {/* Profile Header Card */}
-                <div className="bg-(--color-bg-primary)ded-[var(--radius-2xl)] p-(--spacing-6)oshadow-(--shadow-sm)er border-(--color-border)">
-                    <div className="flex flex-col md:flex-row items-center gap-(--spacing-6)">
-                        <div className="relative group">
-                            <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl overflow-hidden ring-4 ring-(--color-primary)/10">
-                                <img
-                                    src="/image/jubayer.png"
-                                    alt="Profile"
-                                    className="w-full h-full object-cover"
-                                />
+                <section className="rounded-3xl border border-(--color-border) bg-(--color-bg-primary) p-6 shadow-sm sm:p-8">
+                    <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
+                        <div className="relative mx-auto lg:mx-0">
+                            <div className="h-28 w-28 overflow-hidden rounded-3xl ring-4 ring-(--color-primary)/10 sm:h-32 sm:w-32">
+                                <img src="/image/jubayer.png" alt="Profile" className="h-full w-full object-cover" />
                             </div>
-                            <button className="absolute -bottom-2 -right-2 p-(--spacing-3) bg-(--color-primary) text-white rounded-lg shadow-lg hover:bg-[var(--color-primary-hover)] transition-all opacity-0 group-hover:opacity-100">
-                                <Camera className="w-4 h-4" />
+                            <button className="absolute -bottom-2 -right-2 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-(--color-primary) text-white shadow-lg transition hover:bg-(--color-primary-dark)">
+                                <Camera className="h-4 w-4" />
                             </button>
                         </div>
 
-                        <div className="flex-1 text-center md:text-left">
-                            <div className="flex flex-col md:flex-row md:items-center gap-2 mb-(--spacing-1)">
-                                <h1 className="text-(--font-size-2xl) font-bold text-[var(--color-text-primary)]">{user.name}</h1>
-                                <span className="inline-flex items-center px-[var(--spacing-3)] py-[var(--spacing-1)] rounded-full text-xs font-medium bg-[var(--color-success)]/10 text-[var(--color-success)]">
+                        <div className="flex-1 text-center lg:text-left">
+                            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                                <div>
+                                    <h1 className="text-3xl font-bold tracking-tight text-(--color-text-primary)">{user.name}</h1>
+                                    <p className="mt-2 text-sm font-medium text-(--color-text-secondary)">{user.role}</p>
+                                </div>
+                                <span className="inline-flex items-center rounded-full bg-emerald-100 px-4 py-2 text-xs font-bold uppercase tracking-[0.24em] text-emerald-700">
                                     {user.status}
                                 </span>
                             </div>
-                            <p className="text-[var(--color-text-secondary)] font-medium">{user.role}</p>
-                            <p className="text-sm text-[var(--color-text-tertiary)] mt-[var(--spacing-1)]">{user.company}</p>
+                            <p className="mt-4 text-sm text-(--color-text-tertiary)">{user.company}</p>
                         </div>
 
-                        <div className="flex gap-[var(--spacing-3)]">
-                            <button type="button" onClick={handleEditProfile} className="p-[var(--spacing-3)] text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)] rounded-[var(--radius-xl)] transition-colors">
-                                <Settings className="w-5 h-5" />
+                        <div className="flex items-center justify-center gap-3 lg:justify-end">
+                            <button type="button" onClick={handleEditProfile} className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-(--color-bg-secondary) text-(--color-text-secondary) transition hover:bg-(--color-bg-tertiary)">
+                                <Settings className="h-5 w-5" />
                             </button>
-                            <button type="button" onClick={handleNotifications} className="p-[var(--spacing-3)] text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-secondary)] rounded-[var(--radius-xl)] transition-colors">
-                                <Bell className="w-5 h-5" />
+                            <button type="button" onClick={handleNotifications} className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-(--color-bg-secondary) text-(--color-text-secondary) transition hover:bg-(--color-bg-tertiary)">
+                                <Bell className="h-5 w-5" />
                             </button>
                         </div>
                     </div>
-                </div>
+                </section>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-(--spacing-6) mt-6">
-
-                    {/* Left Column: Personal Info */}
-                    <div className="lg:col-span-2 space-y-(--spacing-6)">
-                        <div className="bg-[var(--color-bg-primary)] rounded-2xl shadow-[var(--shadow-sm)] border border-[var(--color-border)] overflow-hidden">
-                            <div className={`px-[var(--spacing-6)] py-[var(--spacing-4)] border-b border-[var(--color-border)] flex justify-between items-center`}>
-                                <h3 className="font-bold text-[var(--color-text-primary)]">Account Information</h3>
-                                <button type="button" onClick={handleEditProfile} className="text-sm text-[var(--color-primary)] font-semibold hover:underline">Edit</button>
+                <div className="mt-6 grid gap-6 xl:grid-cols-[2fr_1fr]">
+                    <div className="space-y-6">
+                        <section className="rounded-3xl border border-(--color-border) bg-(--color-bg-primary) p-6 shadow-sm">
+                            <div className="flex items-center justify-between gap-4">
+                                <div>
+                                    <h2 className="text-xl font-bold text-(--color-text-primary)">Account Information</h2>
+                                    <p className="mt-1 text-sm text-(--color-text-secondary)">Review and update your personal details.</p>
+                                </div>
+                                <button type="button" onClick={handleEditProfile} className="text-sm font-semibold text-(--color-primary) hover:underline">Edit</button>
                             </div>
-
-                            <div className="p-[var(--spacing-6)] grid grid-cols-1 md:grid-cols-2 gap-(--spacing-6)">
+                            <div className="mt-6 grid gap-4 md:grid-cols-2">
                                 <InfoItem icon={<User />} label="Full Name" value={user.name} />
                                 <InfoItem icon={<Mail />} label="Email Address" value={user.email} />
                                 <InfoItem icon={<ShieldCheck />} label="Role" value={user.role} />
                                 <InfoItem icon={<Clock />} label="Member Since" value={user.joined} />
                             </div>
-                        </div>
+                        </section>
 
-                        {/* Recent Activity Section */}
-                        <div className="bg-[var(--color-bg-primary)] rounded-[var(--radius-2xl)] shadow-[var(--shadow-sm)] border border-[var(--color-border)] p-[var(--spacing-6)]">
-                            <h3 className="font-bold text-[var(--color-text-primary)] mb-[var(--spacing-6)]">Recent Activity</h3>
-                            <div className="space-y-[var(--spacing-6)]">
+                        <section className="rounded-3xl border border-(--color-border) bg-(--color-bg-primary) p-6 shadow-sm">
+                            <h2 className="text-xl font-bold text-(--color-text-primary)">Recent Activity</h2>
+                            <div className="mt-6 space-y-4">
                                 <ActivityItem
                                     title="Updated MFI Logic"
                                     time="2 hours ago"
                                     desc="Pushed changes to loan collection algorithm."
-                                    icon={<CheckCircle2 className="text-[var(--color-primary)]" />}
+                                    icon={<CheckCircle2 className="h-5 w-5 text-(--color-primary)" />}
                                 />
                                 <ActivityItem
                                     title="Eco Bazar Deployment"
                                     time="Yesterday"
                                     desc="Successfully deployed v2.0 to Vercel."
-                                    icon={<CheckCircle2 className="text-[var(--color-success)]" />}
+                                    icon={<CheckCircle2 className="h-5 w-5 text-(--color-success)" />}
                                 />
                             </div>
-                        </div>
+                        </section>
                     </div>
 
-                    {/* Right Column: Quick Actions & Stats */}
-                    <div className="space-y-[var(--spacing-6)]">
-                        <div className="bg-linear-to-br from-[var(--color-primary)] to-(--color-secondary) rounded-2xl p-(--spacing-6) text-white shadow-(--shadow-xl) shadow-(--color-primary)/20">
-                            <h4 className="font-semibold mb-(--spacing-2) opacity-90">Current Project</h4>
-                            <p className="text-(--font-size-xl) font-bold mb-(--spacing-4) italic">Rebels Admin Dashboard</p>
-                            <div className="w-full bg-(--color-bg-tertiary) rounded-full h-2 mb-(--spacing-4)">
-                                <div className="bg-(--color-bg-primary) h-2 rounded-full w-3/4"></div>
+                    <section className="space-y-6">
+                        <div className="rounded-3xl bg-linear-to-br from-(--color-primary) to-(--color-secondary) p-6 text-white shadow-xl shadow-(--color-primary)/20">
+                            <h3 className="text-base font-semibold uppercase tracking-[0.2em] text-white/80">Current Project</h3>
+                            <p className="mt-4 text-2xl font-bold italic">Rebels Admin Dashboard</p>
+                            <div className="mt-6 h-2 overflow-hidden rounded-full bg-white/20">
+                                <div className="h-2 w-3/4 rounded-full bg-white" />
                             </div>
-                            <p className="text-(--font-size-xs) opacity-80 text-right">75% Complete</p>
+                            <p className="mt-3 text-right text-sm text-white/80">75% Complete</p>
                         </div>
 
-                        <div className="bg-(--color-bg-primary) rounded-2xlhadow-sm)] border border-(--color-border) p-(--spacing-2)">
-                            <button type="button" onClick={handleSecuritySettings} className="w-full flex items-center gap-(--spacing-3) p-(--spacing-4)r:bg-[var(--color-bg-secondary)] rounded-xltext-[var(--color-text-primary)]">
-                                <div className="p-(--spacing-3) bg-(--color-bg-secondary) text-(--color-primary) rounded-lg">
-                                    <ShieldCheck className="w-5 h-5" />
+                        <div className="rounded-3xl border border-(--color-border) bg-(--color-bg-primary) p-4 shadow-sm">
+                            <button type="button" onClick={handleSecuritySettings} className="flex w-full items-center gap-3 rounded-2xl border border-(--color-border) bg-(--color-bg-secondary) px-4 py-4 text-left transition hover:border-(--color-primary)">
+                                <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-(--color-primary) text-white">
+                                    <ShieldCheck className="h-5 w-5" />
                                 </div>
-                                <span className="font-medium">Security Settings</span>
+                                <div>
+                                    <p className="font-semibold text-(--color-text-primary)">Security Settings</p>
+                                    <p className="mt-1 text-sm text-(--color-text-secondary)">Manage your secure access settings.</p>
+                                </div>
                             </button>
-                            <button type="button" onClick={handleSignOut} className="w-full flex items-center gap-(--spacing-3) p-(--spacing-4) hover:bg-(--color-error)/10 rounded-xl transition-all text-(--color-error)">
-                                <div className="p-(--spacing-3) bg-(--color-error)/10 text-(--color-error) rounded-lg">
-                                    <LogOut className="w-5 h-5" />
+                            <button type="button" onClick={handleSignOut} className="mt-3 flex w-full items-center gap-3 rounded-2xl border border-(--color-border) px-4 py-4 text-left text-(--color-error) transition hover:bg-(--color-error)/10">
+                                <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-(--color-error)/10 text-(--color-error)">
+                                    <LogOut className="h-5 w-5" />
                                 </div>
-                                <span className="font-medium">Sign Out</span>
+                                <div>
+                                    <p className="font-semibold">Sign Out</p>
+                                    <p className="mt-1 text-sm text-(--color-text-secondary)">Securely log out of your account.</p>
+                                </div>
                             </button>
                         </div>
-                    </div>
-
+                    </section>
                 </div>
             </div>
         </div>
     );
 };
 
-// Reusable Components
 const InfoItem = ({ icon, label, value }: { icon: React.ReactElement; label: string; value: string }) => (
-    <div className="flex items-start gap-(--spacing-4)">
-        <div className="p-(--spacing-3)var(--color-bg-secondary)] text-(--color-text-secondary) rounded-xl">
-            {React.cloneElement(icon, { className: "w-5 h-5" } as any)}
+    <div className="flex items-start gap-4 rounded-3xl bg-(--color-bg-secondary) p-4">
+        <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-(--color-bg-primary) text-(--color-text-secondary)">
+            {React.cloneElement(icon, { className: 'h-5 w-5' } as any)}
         </div>
         <div>
-            <p className="text-(--font-size-xs) uppercase tracking-wider font-bold mb-(--spacing-1)">{label}</p>
-            <p className="text-(--color-text-primary) font-medium">{value}</p>
+            <p className="text-xs uppercase tracking-[0.24em] text-(--color-text-secondary)">{label}</p>
+            <p className="mt-2 font-medium text-(--color-text-primary)">{value}</p>
         </div>
     </div>
 );
 
 const ActivityItem = ({ title, time, desc, icon }: { title: string; time: string; desc: string; icon: React.ReactElement }) => (
-    <div className="flex gap-(--spacing-4)">
-        <div className="mt-[var(--spacing-1)]">{icon}</div>
-        <div>
-            <div className="flex items-center gap-[var(--spacing-2)]">
-                <h4 className="font-bold text-[var(--color-text-primary)] text-[var(--font-size-sm)]">{title}</h4>
-                <span className="text-[var(--font-size-xs)] text-[var(--color-text-tertiary)]">{time}</span>
+    <div className="rounded-3xl border border-(--color-border) bg-(--color-bg-secondary) p-4 shadow-sm">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+            <div className="mt-1">{icon}</div>
+            <div className="flex-1">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <h4 className="text-sm font-bold text-(--color-text-primary)">{title}</h4>
+                    <span className="text-xs text-(--color-text-secondary)">{time}</span>
+                </div>
+                <p className="mt-3 text-sm text-(--color-text-secondary)">{desc}</p>
             </div>
-            <p className="text-[var(--font-size-base)] text-[var(--color-text-secondary)] mt-[var(--spacing-1)]">{desc}</p>
         </div>
     </div>
 );
