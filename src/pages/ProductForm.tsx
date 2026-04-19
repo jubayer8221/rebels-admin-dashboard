@@ -88,16 +88,16 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onClose }) => {
     const cancelCls = `flex-1 py-4 border rounded-2xl font-bold transition ${isDark ? 'border-[#333] text-gray-400 hover:bg-[#222]' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`;
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6 max-h-[85vh] overflow-y-auto px-1 custom-scrollbar">
+        <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6 max-h-[85vh] overflow-y-auto px-1 custom-scrollbar">
             {error && <div className="p-3 bg-red-50 text-red-600 rounded-xl text-xs font-bold">{error}</div>}
 
             {/* Image Upload */}
             <div className="flex flex-col items-center gap-4 py-2">
-                <div className={`w-32 h-32 rounded-[2rem] border-2 border-dashed overflow-hidden flex items-center justify-center relative group
+                <div className={`w-24 sm:w-32 h-24 sm:h-32 rounded-[2rem] border-2 border-dashed overflow-hidden flex items-center justify-center relative group
                     ${isDark ? 'bg-[#111] border-[#333]' : 'bg-gray-100 border-gray-200'}`}>
                     {previewUrl
                         ? <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
-                        : <ImageIcon className={isDark ? 'text-gray-600' : 'text-gray-300'} size={32} />
+                        : <ImageIcon className={isDark ? 'text-gray-600' : 'text-gray-300'} size={24} />
                     }
                     <label className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
                         <span className="text-white text-[10px] font-bold uppercase">Change</span>
@@ -107,10 +107,10 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onClose }) => {
             </div>
 
             {/* Core Details */}
-            <section className="space-y-4">
+            <section className="space-y-3 sm:space-y-4">
                 <h3 className={sectionHeadCls}><Package size={14} /> Core Details</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="md:col-span-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div className="sm:col-span-2">
                         <label className={labelCls}>Product Name *</label>
                         <input required className={inputCls} value={formData.name}
                             onChange={e => setFormData({ ...formData, name: e.target.value })} />
@@ -129,9 +129,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onClose }) => {
             </section>
 
             {/* Categorization */}
-            <section className="space-y-4">
+            <section className="space-y-3 sm:space-y-4">
                 <h3 className={sectionHeadCls}><Tag size={14} /> Categorization</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
                     <div>
                         <label className={labelCls}>Category ID</label>
                         <input type="number" className={inputCls} value={formData.categoryId}
@@ -151,9 +151,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onClose }) => {
             </section>
 
             {/* Technical Specs */}
-            <section className="space-y-4">
+            <section className="space-y-3 sm:space-y-4">
                 <h3 className={sectionHeadCls}><Layers size={14} /> Technical Specs</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
                     <div>
                         <label className={labelCls}>Stock</label>
                         <input type="number" className={inputCls} value={formData.stock}
@@ -192,9 +192,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onClose }) => {
             </section>
 
             {/* Content & Care */}
-            <section className="space-y-4">
+            <section className="space-y-3 sm:space-y-4">
                 <h3 className={sectionHeadCls}><Info size={14} /> Content & Care</h3>
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                     <div>
                         <label className={labelCls}>Description</label>
                         <textarea rows={3} className={inputCls} value={formData.description}
@@ -209,12 +209,12 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onClose }) => {
             </section>
 
             {/* Footer Actions */}
-            <div className={`sticky bottom-0 pt-6 pb-2 flex gap-3 border-t ${footerBg} ${borderColor}`}>
-                <button type="button" onClick={onClose} className={cancelCls}>Cancel</button>
+            <div className={`sticky bottom-0 pt-4 sm:pt-6 pb-2 flex flex-col sm:flex-row gap-2 sm:gap-3 border-t ${footerBg} ${borderColor}`}>
+                <button type="button" onClick={onClose} className={`${cancelCls} py-3 sm:py-4`}>Cancel</button>
                 <button type="submit" disabled={loading}
-                    className="flex-1 py-4 text-white rounded-2xl font-bold shadow-xl transition-all flex items-center justify-center gap-2 hover:opacity-90 disabled:opacity-60"
+                    className="flex-1 py-3 sm:py-4 text-white rounded-2xl font-bold shadow-xl transition-all flex items-center justify-center gap-2 hover:opacity-90 disabled:opacity-60"
                     style={{ backgroundColor: 'var(--accent)' }}>
-                    <Save size={18} /> {loading ? 'Syncing...' : 'Save Product'}
+                    <Save size={16} /> {loading ? 'Syncing...' : 'Save Product'}
                 </button>
             </div>
         </form>

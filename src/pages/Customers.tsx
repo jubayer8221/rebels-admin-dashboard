@@ -255,8 +255,8 @@ const Customers: React.FC = () => {
             </header>
 
             {/* Controls */}
-            <div className={`flex flex-wrap items-center gap-4 p-4 rounded-2xl border ${surfaceCls}`}>
-                <div className="flex-1 min-w-70 relative group">
+            <div className={`flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 p-3 sm:p-4 rounded-2xl border ${surfaceCls}`}>
+                <div className="flex-1 min-w-full sm:min-w-56 relative group">
                     <Search size={16} className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${textSub} group-focus-within:text-[--accent]`} />
                     <input type="text" placeholder="Search members..." value={search} onChange={e => setSearch(e.target.value)}
                         className={`w-full pl-11 pr-4 py-2.5 rounded-xl border outline-none transition-all text-sm
@@ -264,14 +264,14 @@ const Customers: React.FC = () => {
                 </div>
                 <div className="flex flex-wrap gap-2">
                     <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}
-                        className={`px-4 py-2.5 rounded-xl border text-sm font-semibold outline-none cursor-pointer ${isDark ? 'bg-[#0d0d0d] border-white/10 text-gray-300' : 'bg-gray-50 border-gray-200 text-gray-700'}`}>
+                        className={`flex-1 sm:flex-none px-3 sm:px-4 py-2.5 rounded-xl border text-sm font-semibold outline-none cursor-pointer ${isDark ? 'bg-[#0d0d0d] border-white/10 text-gray-300' : 'bg-gray-50 border-gray-200 text-gray-700'}`}>
                         <option value="All">All Status</option>
                         <option value="Active">Active</option>
                         <option value="Inactive">Inactive</option>
                         <option value="Blocked">Blocked</option>
                     </select>
                     <select value={tierFilter} onChange={e => setTierFilter(e.target.value)}
-                        className={`px-4 py-2.5 rounded-xl border text-sm font-semibold outline-none cursor-pointer ${isDark ? 'bg-[#0d0d0d] border-white/10 text-gray-300' : 'bg-gray-50 border-gray-200 text-gray-700'}`}>
+                        className={`flex-1 sm:flex-none px-3 sm:px-4 py-2.5 rounded-xl border text-sm font-semibold outline-none cursor-pointer ${isDark ? 'bg-[#0d0d0d] border-white/10 text-gray-300' : 'bg-gray-50 border-gray-200 text-gray-700'}`}>
                         <option value="All">All Tiers</option>
                         <option value="Bronze">Bronze</option>
                         <option value="Silver">Silver</option>
@@ -279,7 +279,7 @@ const Customers: React.FC = () => {
                         <option value="Platinum">Platinum</option>
                     </select>
                     <select value={sortKey} onChange={e => setSortKey(e.target.value as any)}
-                        className={`px-4 py-2.5 rounded-xl border text-sm font-semibold outline-none cursor-pointer ${isDark ? 'bg-[#0d0d0d] border-white/10 text-gray-300' : 'bg-gray-50 border-gray-200 text-gray-700'}`}>
+                        className={`flex-1 sm:flex-none px-3 sm:px-4 py-2.5 rounded-xl border text-sm font-semibold outline-none cursor-pointer ${isDark ? 'bg-[#0d0d0d] border-white/10 text-gray-300' : 'bg-gray-50 border-gray-200 text-gray-700'}`}>
                         <option value="totalSpent">Sort: Value</option>
                         <option value="totalOrders">Sort: Activity</option>
                         <option value="lastOrder">Sort: Recency</option>
@@ -287,8 +287,8 @@ const Customers: React.FC = () => {
                 </div>
             </div>
 
-            {/* Table */}
-            <div className={`rounded-2xl border overflow-hidden ${surfaceCls}`}>
+            {/* Table - Desktop View */}
+            <div className={`hidden md:block rounded-2xl border overflow-hidden ${surfaceCls}`}>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
@@ -368,7 +368,7 @@ const Customers: React.FC = () => {
                 </div>
 
                 {/* Footer */}
-                <div className={`px-6 py-4 border-t flex items-center justify-between ${isDark ? 'border-white/5' : 'border-gray-100'}`}>
+                <div className={`px-6 py-4 border-t flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 ${isDark ? 'border-white/5' : 'border-gray-100'}`}>
                     <p className={`text-xs font-semibold ${textSub}`}>
                         Showing <span className={textMain}>{filtered.length}</span> members
                     </p>
@@ -384,6 +384,66 @@ const Customers: React.FC = () => {
                         })}
                     </div>
                 </div>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className={`md:hidden space-y-3`}>
+                {filtered.length === 0 ? (
+                    <div className={`rounded-2xl border p-8 text-center ${surfaceCls}`}>
+                        <Users size={40} className="text-gray-300 opacity-50 mx-auto mb-3" />
+                        <p className={`text-sm font-semibold ${textSub}`}>No members found matching your criteria</p>
+                    </div>
+                ) : filtered.map(c => (
+                    <div key={c.id} className={`rounded-xl border p-4 ${surfaceCls}`}>
+                        <div className="flex items-start justify-between gap-3 mb-3">
+                            <div className="flex items-start gap-2 flex-1">
+                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 ${getAvatarColor(c.avatar)}`}>
+                                    {c.avatar}
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <p className={`text-sm font-bold ${textMain} truncate`}>{c.name}</p>
+                                    <div className="flex items-center gap-1 mt-1">
+                                        {[...Array(5)].map((_, i) => (
+                                            <Star key={i} size={10} className={i < Math.floor(c.rating) ? 'text-amber-400 fill-amber-400' : 'text-gray-200 fill-gray-200'} />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                            <ActionMenu
+                                onView={() => setSelectedCustomer(c)}
+                                onBlock={() => handleBlock(c.id)}
+                                onReset={() => handleReset(c.id)}
+                            />
+                        </div>
+                        <div className={`text-xs space-y-2 p-2 rounded-lg ${isDark ? 'bg-white/5' : 'bg-gray-50'}`}>
+                            <div className="flex justify-between">
+                                <span className={textSub}>Email:</span>
+                                <span className={`${textMain} truncate`}>{c.email}</span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className={textSub}>Phone:</span>
+                                <span className={textMain}>{c.phone}</span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className={textSub}>Location:</span>
+                                <span className={textMain}>{c.location}</span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className={textSub}>Spent:</span>
+                                <span className={`${textMain} font-semibold`}>{fmt(c.totalSpent)}</span>
+                            </div>
+                        </div>
+                        <div className="flex gap-2 mt-3">
+                            <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-bold flex-1 justify-center ${statusConfig[c.status].bg} ${statusConfig[c.status].text}`}>
+                                <span className={`w-1 h-1 rounded-full ${statusConfig[c.status].dot}`} />
+                                {c.status}
+                            </span>
+                            <span className={`inline-flex items-center px-2 py-1 rounded-lg border text-[10px] font-bold ${tierConfig[c.tier].bg} ${tierConfig[c.tier].text} ${tierConfig[c.tier].border}`}>
+                                {c.tier}
+                            </span>
+                        </div>
+                    </div>
+                ))}
             </div>
 
             {/* Modal */}

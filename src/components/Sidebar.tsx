@@ -70,7 +70,7 @@ export const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
 
                     <button
                         onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                        className={`${getPadding('sm')} rounded-lg bg-(--color-bg-secondary) hover:bg-(--color-bg-tertiary) text-(--color-text-secondary) transition-colors`}
+                        className={`${getPadding('sm')} rounded-lg bg-[var(--color-bg-secondary)] hover:bg-[var(--color-secondary)]/10 hover:text-[var(--color-secondary)] hover:shadow-md hover:shadow-[var(--color-secondary)]/20 text-[var(--color-text-secondary)] transition-all duration-200`}
                         title={sidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
                     >
                         {sidebarCollapsed ? <PanelRightClose size={18} /> : <PanelLeftClose size={18} />}
@@ -89,8 +89,8 @@ export const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
                                 title={sidebarCollapsed ? item.name : ''}
                                 className={({ isActive }) =>
                                     `flex items-center ${getPadding('sm')} rounded-xl transition-all duration-200 group shrink-0 ${isActive
-                                        ? 'text-white shadow-lg'
-                                        : 'text-(--color-text-secondary) hover:bg-(--color-bg-secondary)'
+                                        ? 'text-white shadow-lg shadow-[var(--color-secondary)]/30'
+                                        : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-secondary)]/10 hover:text-[var(--color-secondary)]'
                                     }`
                                 }
                                 style={({ isActive }) =>
@@ -117,11 +117,11 @@ export const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
                     </nav>
 
                     {/* Logout Section - Pinned at bottom */}
-                    <div className={`${getPadding('sm')} border-t border-(--color-border) py-5 mt-auto`}>
+                    <div className={`${getPadding('sm')} border-t border-[var(--color-border)] py-5 mt-auto`}>
                         <button
                             onClick={handleLogout}
                             title={sidebarCollapsed ? 'Logout' : ''}
-                            className={`flex items-center w-full ${getPadding('sm')} ${getGap('sm')} text-(--color-text-secondary) hover:text-(--color-error) hover:bg-(--color-error)/10 rounded-xl transition-colors shrink-0`}
+                            className={`flex items-center w-full ${getPadding('sm')} ${getGap('sm')} text-[var(--color-text-secondary)] hover:text-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/10 hover:shadow-md hover:shadow-[var(--color-secondary)]/20 rounded-xl transition-all duration-200 shrink-0`}
                         >
                             <LogOut
                                 size={20}

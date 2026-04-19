@@ -83,10 +83,10 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
             <div
                 ref={ref}
                 className={`
-                    bg-(--color-bg-primary)
+                    glass glass-hover
                     rounded-lg
                     transition-all
-                    duration-normal
+                    duration-200
                     ${shadowClass}
                     ${borderClass}
                     ${className}

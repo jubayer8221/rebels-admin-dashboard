@@ -33,7 +33,7 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans">
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 sm:p-6 font-sans">
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
                 <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-200/40 rounded-full blur-[120px]" />
                 <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-100/60 rounded-full blur-[120px]" />
@@ -44,16 +44,16 @@ const Login = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 className="w-full max-w-xl z-10 mx-auto"
             >
-                <div className="text-center mb-10">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-white shadow-xl shadow-blue-500/10 mb-6">
-                        <ShieldCheck className="text-blue-600" size={32} />
+                <div className="text-center mb-8 sm:mb-10">
+                    <div className="inline-flex items-center justify-center w-14 sm:w-16 h-14 sm:h-16 rounded-3xl bg-white shadow-xl shadow-blue-500/10 mb-4 sm:mb-6">
+                        <ShieldCheck className="text-blue-600" size={28} />
                     </div>
-                    <h1 className="text-3xl font-black text-gray-900 tracking-tight">Rebels Inventory</h1>
-                    <p className="text-gray-500 mt-2 font-medium">Secure Administrative Access</p>
+                    <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">Rebels Inventory</h1>
+                    <p className="text-gray-500 mt-2 font-medium text-sm sm:text-base">Secure Administrative Access</p>
                 </div>
 
-                <div className="bg-white/80 backdrop-blur-2xl border border-white shadow-[0_20px_50px_rgba(0,0,0,0.05)] p-10 rounded-[2.5rem]">
-                    <form onSubmit={handleLogin} className="space-y-6">
+                <div className="bg-white/80 backdrop-blur-2xl border border-white shadow-[0_20px_50px_rgba(0,0,0,0.05)] p-6 sm:p-10 rounded-[2.5rem]">
+                    <form onSubmit={handleLogin} className="space-y-5 sm:space-y-6">
 
                         {/* Error Display */}
                         {error && (
@@ -67,7 +67,7 @@ const Login = () => {
                         )}
 
                         <div className="space-y-2">
-                            <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Email Address</label>
+                            <label className="text-[10px] sm:text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Email Address</label>
                             <div className="relative group">
                                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors" size={20} />
                                 <input
@@ -75,14 +75,14 @@ const Login = () => {
                                     required
                                     value={credentials.email}
                                     onChange={handleChange}
-                                    className="w-full bg-gray-50 border border-gray-100 rounded-2xl py-4 pl-12 pr-4 outline-none focus:bg-white focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 transition-all text-gray-800"
+                                    className="w-full bg-gray-50 border border-gray-100 rounded-2xl py-3 sm:py-4 pl-12 pr-4 outline-none focus:bg-white focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 transition-all text-gray-800 text-sm sm:text-base"
                                     placeholder="admin@company.com"
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Password</label>
+                            <label className="text-[10px] sm:text-[11px] font-black text-gray-400 uppercase tracking-widest ml-1">Password</label>
                             <div className="relative group">
                                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors" size={20} />
                                 <input
@@ -90,7 +90,7 @@ const Login = () => {
                                     required
                                     value={credentials.password}
                                     onChange={handleChange}
-                                    className="w-full bg-gray-50 border border-gray-100 rounded-2xl py-4 pl-12 pr-12 outline-none focus:bg-white focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 transition-all text-gray-800"
+                                    className="w-full bg-gray-50 border border-gray-100 rounded-2xl py-3 sm:py-4 pl-12 pr-12 outline-none focus:bg-white focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 transition-all text-gray-800 text-sm sm:text-base"
                                     placeholder="••••••••"
                                 />
                                 <button

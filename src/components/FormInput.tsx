@@ -101,7 +101,7 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
                         border-2
                         rounded-md
                         transition-all
-                        duration-fast
+                        duration-200
                         
                         ${error
                             ? 'border-[var(--color-error)]'
@@ -109,9 +109,11 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
                         }
                         
                         focus:outline-none
-                        focus:border-[var(--color-primary)]
+                        focus:border-[var(--color-secondary)]
                         focus:ring-4
-                        focus:ring-[var(--color-primary-light)]
+                        focus:ring-[var(--color-secondary-light)]
+                        focus:shadow-lg
+                        focus:shadow-[var(--color-secondary)]/20
                         
                         disabled:bg-[var(--color-bg-secondary)]
                         disabled:text-[var(--color-text-disabled)]

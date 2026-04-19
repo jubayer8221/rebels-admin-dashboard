@@ -58,11 +58,33 @@ export function applyThemeCSSVariables(
   root.style.setProperty('--color-primary-light', accentColor + '18');
   root.style.setProperty('--color-primary-lighter', accentColor + '0f');
 
-  // Secondary colors
+  // Secondary colors with hover/active states
   root.style.setProperty('--color-secondary', colorPalette.secondary.light);
+  root.style.setProperty('--color-secondary-rgb', hexToRgb(colorPalette.secondary.light));
+  root.style.setProperty('--color-secondary-hover', hexAdjust(colorPalette.secondary.light, isDark ? 30 : -25));
+  root.style.setProperty('--color-secondary-active', hexAdjust(colorPalette.secondary.light, isDark ? 50 : -40));
+  root.style.setProperty('--color-secondary-light', colorPalette.secondary.light + '18');
+  
+  // Success colors with hover/active states
   root.style.setProperty('--color-success', colorPalette.success.light);
+  root.style.setProperty('--color-success-rgb', hexToRgb(colorPalette.success.light));
+  root.style.setProperty('--color-success-hover', hexAdjust(colorPalette.success.light, isDark ? 30 : -25));
+  root.style.setProperty('--color-success-active', hexAdjust(colorPalette.success.light, isDark ? 50 : -40));
+  root.style.setProperty('--color-success-light', colorPalette.success.light + '18');
+  
+  // Warning colors with hover/active states
   root.style.setProperty('--color-warning', colorPalette.warning.light);
+  root.style.setProperty('--color-warning-rgb', hexToRgb(colorPalette.warning.light));
+  root.style.setProperty('--color-warning-hover', hexAdjust(colorPalette.warning.light, isDark ? 30 : -25));
+  root.style.setProperty('--color-warning-active', hexAdjust(colorPalette.warning.light, isDark ? 50 : -40));
+  root.style.setProperty('--color-warning-light', colorPalette.warning.light + '18');
+  
+  // Error colors with hover/active states
   root.style.setProperty('--color-error', colorPalette.error.light);
+  root.style.setProperty('--color-error-rgb', hexToRgb(colorPalette.error.light));
+  root.style.setProperty('--color-error-hover', hexAdjust(colorPalette.error.light, isDark ? 30 : -25));
+  root.style.setProperty('--color-error-active', hexAdjust(colorPalette.error.light, isDark ? 50 : -40));
+  root.style.setProperty('--color-error-light', colorPalette.error.light + '18');
 
   // Background colors
   root.style.setProperty('--color-bg-primary', theme.primary);
@@ -78,6 +100,20 @@ export function applyThemeCSSVariables(
 
   // Border color
   root.style.setProperty('--color-border', borderColor);
+
+  // ────────────────────────────────────────────────────────────────────────
+  // GLASSMORPHISM VARIABLES
+  // ────────────────────────────────────────────────────────────────────────
+  
+  const glassBackground = isDark ? 'rgba(26, 26, 26, 0.7)' : 'rgba(255, 255, 255, 0.7)';
+  const glassBackdrop = isDark ? 'rgba(26, 26, 26, 0.5)' : 'rgba(255, 255, 255, 0.5)';
+  
+  root.style.setProperty('--glass-bg', glassBackground);
+  root.style.setProperty('--glass-backdrop', glassBackdrop);
+  root.style.setProperty('--glass-border', isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)');
+  root.style.setProperty('--glass-shadow', isDark ? '0 8px 32px rgba(0, 0, 0, 0.3)' : '0 8px 32px rgba(0, 0, 0, 0.1)');
+  root.style.setProperty('--glass-glow-primary', `0 0 30px rgba(${hexToRgb(accentColor)}, 0.2)`);
+  root.style.setProperty('--glass-glow-secondary', `0 0 30px rgba(${hexToRgb(colorPalette.secondary.light)}, 0.2)`);
 
   // ────────────────────────────────────────────────────────────────────────
   // SPACING VARIABLES

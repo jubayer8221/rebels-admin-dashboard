@@ -298,6 +298,159 @@ body {
   background-color: var(--color-bg-secondary);
 }
 
+/* ============================================================================
+   GLASSMORPHISM UTILITIES
+   ============================================================================ */
+
+/* Base glassmorphism effect */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-sm {
+  background: var(--glass-backdrop);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-lg {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+}
+
+/* Glassmorphism hover effects with transitions */
+.glass-hover {
+  transition: all 150ms ease-out;
+}
+
+.glass-hover:hover {
+  background: var(--glass-bg);
+  border-color: var(--color-primary);
+  box-shadow: var(--glass-shadow), var(--glass-glow-primary);
+  transform: translateY(-2px);
+}
+
+.glass-hover:active {
+  transform: translateY(0);
+}
+
+/* Glassmorphism with secondary color on hover */
+.glass-secondary-hover {
+  transition: all 150ms ease-out;
+}
+
+.glass-secondary-hover:hover {
+  background: var(--glass-bg);
+  border-color: var(--color-secondary);
+  box-shadow: var(--glass-shadow), var(--glass-glow-secondary);
+  transform: translateY(-2px);
+}
+
+.glass-secondary-hover:active {
+  background: rgba(var(--color-secondary-rgb), 0.1);
+  transform: translateY(0);
+}
+
+/* Glassmorphism interactive element */
+.glass-interactive {
+  position: relative;
+  transition: all 200ms ease-out;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-interactive::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 50%);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+  pointer-events: none;
+}
+
+.glass-interactive:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--glass-shadow), var(--glass-glow-primary);
+  transform: translateY(-4px);
+}
+
+.glass-interactive:hover::before {
+  opacity: 1;
+}
+
+.glass-interactive:active {
+  transform: translateY(-2px);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Glassmorphism with secondary color interactive */
+.glass-interactive-secondary {
+  position: relative;
+  transition: all 200ms ease-out;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-interactive-secondary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 50%);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+  pointer-events: none;
+}
+
+.glass-interactive-secondary:hover {
+  border-color: var(--color-secondary);
+  box-shadow: var(--glass-shadow), var(--glass-glow-secondary);
+  transform: translateY(-4px);
+}
+
+.glass-interactive-secondary:hover::before {
+  opacity: 1;
+}
+
+.glass-interactive-secondary:active {
+  transform: translateY(-2px);
+  box-shadow: var(--glass-shadow);
+  background: rgba(var(--color-secondary-rgb), 0.05);
+}
+
+/* Glassmorphism background blur layers */
+.glass-layer-1 {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.glass-layer-2 {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.glass-layer-3 {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Subtle glass effect for borders */
+.glass-border {
+  border: 1px solid var(--glass-border);
+}
+
 .bg-surface-tertiary {
   background-color: var(--color-bg-tertiary);
 }

@@ -43,57 +43,91 @@ export const Profile = () => {
         <div className="min-h-screen bg-(--color-bg-secondary) text-(--color-text-primary)">
             <div className={`mx-auto max-w-screen ${getGap('lg')}`}>
                 {statusMessage && (
-                    <div className="mb-6 rounded-3xl border border-(--color-border) bg-(--color-bg-primary) p-4 text-(--color-text-secondary) shadow-sm">
+                    <div className="mb-4 sm:mb-6 rounded-3xl border border-(--color-border) bg-(--color-bg-primary) p-4 text-(--color-text-secondary) shadow-sm text-sm">
                         {statusMessage}
                     </div>
                 )}
 
-                <section className="rounded-3xl border border-(--color-border) bg-(--color-bg-primary) p-6 shadow-sm sm:p-8">
-                    <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
-                        <div className="relative mx-auto lg:mx-0">
-                            <div className="h-28 w-28 overflow-hidden rounded-3xl ring-4 ring-(--color-primary)/10 sm:h-32 sm:w-32">
-                                <img src="/image/jubayer.png" alt="Profile" className="h-full w-full object-cover" />
+                <section className="group rounded-3xl border border-(--color-border) bg-(--color-bg-primary) p-5 sm:p-8 shadow-sm transition-all hover:shadow-md">
+                    <div className="flex flex-col items-center gap-6 lg:flex-row lg:items-center lg:justify-between">
+
+                        {/* Profile Image Section */}
+                        <div className="relative shrink-0">
+                            <div className="h-28 w-28 sm:h-32 sm:w-32 overflow-hidden rounded-3xl ring-4 ring-(--color-primary)/10 transition-transform group-hover:scale-[1.02]">
+                                <img
+                                    src="/image/jubayer.png"
+                                    alt={`${user.name}'s profile`}
+                                    className="h-full w-full object-cover"
+                                />
                             </div>
-                            <button className="absolute -bottom-2 -right-2 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-(--color-primary) text-white shadow-lg transition hover:bg-(--color-primary-dark)">
-                                <Camera className="h-4 w-4" />
+                            <button
+                                aria-label="Change profile photo"
+                                className="absolute -bottom-2 -right-2 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-(--color-primary) text-white shadow-lg transition-all hover:scale-110 active:scale-95"
+                            >
+                                <Camera className="h-5 w-5" />
                             </button>
                         </div>
 
-                        <div className="flex-1 text-center lg:text-left">
-                            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                        {/* Info Content Section */}
+                        <div className="flex-1 text-center lg:pl-8 lg:text-left">
+                            <div className="flex flex-col items-center gap-3 lg:flex-row lg:justify-between">
                                 <div>
-                                    <h1 className="text-3xl font-bold tracking-tight text-(--color-text-primary)">{user.name}</h1>
-                                    <p className="mt-2 text-sm font-medium text-(--color-text-secondary)">{user.role}</p>
+                                    <h1 className="text-2xl font-bold tracking-tight text-(--color-text-primary) sm:text-3xl">
+                                        {user.name}
+                                    </h1>
+                                    <div className="mt-1 flex flex-wrap justify-center gap-2 lg:justify-start">
+                                        <span className="text-sm font-medium text-(--color-text-secondary)">
+                                            {user.role}
+                                        </span>
+                                        <span className="hidden text-(--color-text-tertiary) lg:inline">•</span>
+                                        <span className="text-sm text-(--color-text-tertiary)">
+                                            {user.company}
+                                        </span>
+                                    </div>
                                 </div>
-                                <span className="inline-flex items-center rounded-full bg-emerald-100 px-4 py-2 text-xs font-bold uppercase tracking-[0.24em] text-emerald-700">
+
+                                {/* Status Pill */}
+                                <span className="inline-flex items-center rounded-full bg-emerald-100/80 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-emerald-700 backdrop-blur-sm">
+                                    <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                                     {user.status}
                                 </span>
                             </div>
-                            <p className="mt-4 text-sm text-(--color-text-tertiary)">{user.company}</p>
                         </div>
 
-                        <div className="flex items-center justify-center gap-3 lg:justify-end">
-                            <button type="button" onClick={handleEditProfile} className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-(--color-bg-secondary) text-(--color-text-secondary) transition hover:bg-(--color-bg-tertiary)">
+                        {/* Actions Section */}
+                        <div className="flex items-center justify-center gap-3 border-t border-(--color-border) pt-6 lg:border-none lg:pt-0">
+                            <button
+                                type="button"
+                                onClick={handleEditProfile}
+                                aria-label="Settings"
+                                className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-(--color-bg-secondary) text-(--color-text-secondary) transition-all hover:bg-(--color-primary) hover:text-white"
+                            >
                                 <Settings className="h-5 w-5" />
                             </button>
-                            <button type="button" onClick={handleNotifications} className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-(--color-bg-secondary) text-(--color-text-secondary) transition hover:bg-(--color-bg-tertiary)">
+                            <button
+                                type="button"
+                                onClick={handleNotifications}
+                                aria-label="Notifications"
+                                className="relative inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-(--color-bg-secondary) text-(--color-text-secondary) transition-all hover:bg-(--color-primary) hover:text-white"
+                            >
                                 <Bell className="h-5 w-5" />
+                                <span className="absolute top-3 right-3 h-2 w-2 rounded-full bg-red-500 ring-2 ring-(--color-bg-primary)" />
                             </button>
                         </div>
                     </div>
                 </section>
 
-                <div className="mt-6 grid gap-6 xl:grid-cols-[2fr_1fr]">
+                <div className="mt-6 grid gap-6 lg:grid-cols-[2fr_1fr]">
                     <div className="space-y-6">
-                        <section className="rounded-3xl border border-(--color-border) bg-(--color-bg-primary) p-6 shadow-sm">
-                            <div className="flex items-center justify-between gap-4">
-                                <div>
-                                    <h2 className="text-xl font-bold text-(--color-text-primary)">Account Information</h2>
-                                    <p className="mt-1 text-sm text-(--color-text-secondary)">Review and update your personal details.</p>
+                        <section className="rounded-2xl sm:rounded-3xl border border-(--color-border) bg-(--color-bg-primary) p-4 sm:p-6 lg:p-8 shadow-sm">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                <div className="flex-1">
+                                    <h2 className="text-lg sm:text-xl font-bold text-(--color-text-primary)">Account Information</h2>
+                                    <p className="mt-1 text-xs sm:text-sm text-(--color-text-secondary)">Review and update your personal details.</p>
                                 </div>
-                                <button type="button" onClick={handleEditProfile} className="text-sm font-semibold text-(--color-primary) hover:underline">Edit</button>
+                                <button type="button" onClick={handleEditProfile} className="text-xs sm:text-sm font-semibold text-(--color-primary) hover:underline w-fit">Edit</button>
                             </div>
-                            <div className="mt-6 grid gap-4 md:grid-cols-2">
+                            <div className="mt-4 sm:mt-6 grid gap-3 sm:gap-4 md:grid-cols-2">
                                 <InfoItem icon={<User />} label="Full Name" value={user.name} />
                                 <InfoItem icon={<Mail />} label="Email Address" value={user.email} />
                                 <InfoItem icon={<ShieldCheck />} label="Role" value={user.role} />

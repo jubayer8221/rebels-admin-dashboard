@@ -1,55 +1,124 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTheme } from '../context/ThemeContext';
 
 interface CardProps {
     title: string;
     value: string;
     change: string;
     icon?: React.ReactNode;
+    color?: 'primary' | 'success' | 'warning' | 'info' | 'orange';
 }
 
-const Card: React.FC<CardProps> = ({ title, value, change, icon }) => {
-    const isNeutral = change.toLowerCase().includes("live") || change.toLowerCase().includes("active");
+const Card: React.FC<CardProps> = ({
+    title,
+    value,
+    change,
+    icon,
+    color = 'primary'
+}) => {
+    const { isDark } = useTheme();
+
+    const isNeutral = change.toLowerCase().includes("live") ||
+        change.toLowerCase().includes("active") ||
+        change.toLowerCase().includes("volume");
+
+    // Color mapping
+    const colorMap: Record<string, string> = {
+        primary: isDark ? '#6366f1' : '#4f46e5',
+        success: '#22c55e',
+        warning: '#eab308',
+        info: '#06b6d4',
+        orange: '#f97316',
+    };
+
+    const mainColor = colorMap[color] || colorMap.primary;
 
     return (
         <motion.div
-            whileHover={{ y: -5, scale: 1.02 }}
+            whileHover={{ y: -6, scale: 1.02 }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-            className="relative overflow-hidden bg-[var(--color-bg-primary)] p-[var(--spacing-6)] rounded-[var(--radius-xl)] border border-[var(--color-border)] shadow-sm group hover:shadow-[var(--shadow-lg)] hover:shadow-[var(--color-primary)]/10 transition-all duration-fast"
+            transition={{ duration: 0.35, ease: "easeOut" }}
+            className={`glass glass-interactive relative overflow-hidden rounded-2xl p-5 sm:p-6 group transition-all duration-300 border
+                ${isDark
+                    ? 'border-white/10 bg-white/5'
+                    : 'border-gray-100/80 bg-white/70'
+                }`}
         >
-            {/* Animated Background Glow */}
-            <div className="absolute -right-4 -top-4 w-24 h-24 bg-[var(--color-primary)]/5 rounded-full blur-3xl group-hover:bg-[var(--color-primary)]/10 transition-colors duration-fast" />
+            {/* Subtle right-side gradient overlay */}
+            <div
+                className="absolute top-0 right-0 w-1/3 h-full opacity-40 transition-all duration-300 group-hover:opacity-60"
+                style={{
+                    background: `linear-gradient(to left, ${mainColor}15, transparent)`
+                }}
+            />
 
-            <div className="relative z-10 flex items-start justify-between">
-                <div>
-                    <p className="text-[var(--font-size-xs)] font-bold uppercase tracking-[0.15em] text-[var(--color-text-tertiary)] mb-[var(--spacing-1)] group-hover:text-[var(--color-primary)] transition-colors duration-fast">
-                        {title}
-                    </p>
-                    <motion.h3
-                        initial={{ scale: 1 }}
-                        whileHover={{ scale: 1.05 }}
-                        className="text-[var(--font-size-2xl)] font-bold text-[var(--color-text-primary)] tracking-tight"
+            {/* Background glow on hover */}
+            <div className="absolute -right-6 -top-6 w-28 h-28 bg-linear-to-br from-(--color-primary)/10 to-transparent rounded-full blur-3xl group-hover:from-(--color-secondary)/20 transition-all duration-300" />
+
+            <div className="relative z-10">
+                {/* Icon + Title + Value */}
+                <div className="flex items-start justify-between gap-4">
+                    {icon && (
+                        <div
+                            className="shrink-0 w-10 h-10 sm:w-11 sm:h-11 rounded-2xl flex items-center justify-center transition-all duration-200 group-hover:scale-110"
+                            style={{
+                                backgroundColor: `${mainColor}20`,
+                                color: mainColor,
+                                boxShadow: `0 4px 12px -4px ${mainColor}40`
+                            }}
+                        >
+                            {React.cloneElement(icon as React.ReactElement, { className: 'h-5 w-5' } as any)}
+                        </div>
+                    )}
+
+                    <div className="flex-1 min-w-0 pt-0.5">
+                        <p className={`uppercase tracking-[0.08em] text-[10px] sm:text-xs font-bold mb-1
+                            ${isDark ? 'text-gray-400' : 'text-gray-500'}`}
+                        >
+                            {title}
+                        </p>
+
+                        {/* Responsive Value - adjusts with device size */}
+                        <p className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tighter leading-none
+                            ${isDark ? 'text-white' : 'text-gray-900'}"
+                        >
+                            {value}
+                        </p>
+                    </div>
+                </div>
+
+                {/* Change Indicator */}
+                <div className="mt-5 sm:mt-6 flex items-center gap-3">
+                    <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border transition-all duration-200 text-sm
+                        ${isDark ? 'border-white/10 bg-white/5' : 'border-gray-100 bg-gray-50'}
+                        group-hover:border-opacity-30`}
+                        style={{
+                            borderColor: isNeutral ? 'transparent' : `${mainColor}30`
+                        }}
                     >
-                        {value}
-                    </motion.h3>
-                </div>
-                <div className="p-[var(--spacing-3)] bg-[var(--color-bg-secondary)] rounded-[var(--radius-xl)] text-[var(--color-text-secondary)] group-hover:bg-[var(--color-primary)] group-hover:text-white group-hover:rotate-12 transition-all duration-fast">
-                    {icon}
-                </div>
-            </div>
+                        <div
+                            className="w-2.5 h-2.5 rounded-full animate-pulse shrink-0"
+                            style={{ backgroundColor: isNeutral ? mainColor : '#22c55e' }}
+                        />
+                        <span className={`font-semibold tracking-tight
+                            ${isNeutral
+                                ? (isDark ? 'text-gray-300' : 'text-gray-600')
+                                : 'text-emerald-500'
+                            }`}
+                        >
+                            {change}
+                        </span>
+                    </div>
 
-            <div className="relative z-10 mt-[var(--spacing-6)] flex items-center gap-[var(--spacing-1.5)]">
-                <div className="flex items-center gap-[var(--spacing-1.5)] px-[var(--spacing-2)] py-[var(--spacing-1)] rounded-[var(--radius-lg)] bg-[var(--color-bg-secondary)] group-hover:bg-[var(--color-bg-primary)] transition-colors border border-transparent group-hover:border-[var(--color-border)]">
-                    <span className={`w-[var(--spacing-1.5)] h-[var(--spacing-1.5)] rounded-full animate-pulse ${isNeutral ? 'bg-[var(--color-primary)]' : 'bg-[var(--color-success)]'}`} />
-                    <span className={`text-[var(--font-size-xs)] font-bold ${isNeutral ? 'text-[var(--color-text-secondary)]' : 'text-[var(--color-success)]'}`}>
-                        {change}
+                    <span className={`hidden sm:inline text-xs font-medium opacity-0 group-hover:opacity-70 transition-opacity duration-200
+                        ${isDark ? 'text-gray-500' : 'text-gray-400'}`}
+                    >
+                        Updated just now
                     </span>
                 </div>
-                <p className="text-[var(--font-size-xs)] text-[var(--color-text-tertiary)] font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-fast">
-                    Updated just now
-                </p>
             </div>
         </motion.div>
     );

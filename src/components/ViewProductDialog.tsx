@@ -17,7 +17,7 @@ const ViewProductDialog = ({ item, onClose }: Props) => {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onClick={onClose}
-                    className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm"
+                    className="absolute inset-0 bg-black/40 backdrop-blur-sm"
                 />
 
                 {/* Dialog Content */}
@@ -25,38 +25,38 @@ const ViewProductDialog = ({ item, onClose }: Props) => {
                     initial={{ scale: 0.95, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{ scale: 0.95, opacity: 0 }}
-                    className="relative w-full max-w-full sm:max-w-xl max-h-[calc(100vh-3rem)] overflow-hidden rounded-3xl bg-white shadow-2xl"
+                    className="glass glass-lg relative w-full max-w-full sm:max-w-xl max-h-[calc(100vh-3rem)] overflow-hidden rounded-3xl"
                 >
                     <button
                         onClick={onClose}
-                        className="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
+                        className="absolute top-4 right-4 p-2 bg-[var(--color-secondary)]/20 rounded-full hover:bg-[var(--color-secondary)]/40 hover:text-[var(--color-secondary)] text-[var(--color-text-secondary)] transition-all duration-200"
                     >
-                        <X size={18} className="text-gray-600" />
+                        <X size={18} />
                     </button>
 
-                    <div className="h-48 bg-gray-100">
+                    <div className="h-48 bg-[var(--color-bg-secondary)]">
                         <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
                     </div>
 
                     <div className="p-8">
                         <div className="flex justify-between items-start mb-4">
                             <div>
-                                <h3 className="text-2xl font-bold text-gray-900">{item.name}</h3>
-                                <p className="text-blue-600 font-semibold">{item.brand}</p>
+                                <h3 className="text-2xl font-bold text-[var(--color-text-primary)]">{item.name}</h3>
+                                <p className="text-[var(--color-secondary)] font-semibold">{item.brand}</p>
                             </div>
-                            <p className="text-xl font-black text-gray-900">৳{item.price}</p>
+                            <p className="text-xl font-black text-[var(--color-text-primary)]">৳{item.price}</p>
                         </div>
 
-                        <div className="space-y-4 border-t border-gray-100 pt-6">
-                            <div className="flex items-center gap-3 text-gray-600">
+                        <div className="space-y-4 border-t border-[var(--color-border)] pt-6">
+                            <div className="flex items-center gap-3 text-[var(--color-text-secondary)]">
                                 <Calendar size={18} />
                                 <span className="text-sm">Added on {new Date(item.createdAt).toLocaleDateString()}</span>
                             </div>
-                            <div className="flex items-center gap-3 text-gray-600">
+                            <div className="flex items-center gap-3 text-[var(--color-text-secondary)]">
                                 <Tag size={18} />
                                 <span className="text-sm">Category: {item.category || 'General'}</span>
                             </div>
-                            <div className="flex items-center gap-3 text-green-600">
+                            <div className="flex items-center gap-3 text-[var(--color-success)]">
                                 <ShieldCheck size={18} />
                                 <span className="text-sm font-medium">Verified Inventory</span>
                             </div>
@@ -64,7 +64,7 @@ const ViewProductDialog = ({ item, onClose }: Props) => {
 
                         <button
                             onClick={onClose}
-                            className="w-full mt-8 py-4 bg-gray-900 text-white rounded-2xl font-bold hover:bg-gray-800 transition-all active:scale-95"
+                            className="w-full mt-8 py-4 bg-[var(--color-secondary)] text-white rounded-2xl font-bold hover:bg-[var(--color-secondary-hover)] hover:shadow-lg hover:shadow-[var(--color-secondary)]/20 transition-all duration-200 active:scale-95"
                         >
                             Close Details
                         </button>

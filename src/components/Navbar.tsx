@@ -77,10 +77,12 @@ const MenuItem = ({
 }) => (
     <button
         onClick={onClick}
-        className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors hover:bg-(--color-bg-secondary)
-        ${danger ? 'text-(--color-error) hover:bg-(--color-error)/10' : 'text-(--color-text-secondary) hover:text-(--color-text-primary)'}`}
+        className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${danger
+            ? 'text-(--color-error) hover:bg-(--color-error)/10 hover:text-(--color-error) hover:shadow-md'
+            : 'text-(--color-text-secondary) hover:bg-[var(--color-secondary)]/10 hover:text-[var(--color-secondary)] hover:shadow-md hover:shadow-[var(--color-secondary)]/20'
+            }`}
     >
-        <Icon size={16} className={danger ? 'text-(--color-error)' : ''} />
+        <Icon size={16} className={danger ? 'text-[var(--color-error)]' : ''} />
         {label}
     </button>
 );
@@ -158,11 +160,11 @@ const Navbar = ({ onSidebarToggle, mobileOpen: _mobileOpen }: NavbarProps) => {
                         </button>
 
                         <div className="relative flex-1 max-w-md">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-(--color-text-tertiary)" size={18} />
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-text-tertiary)]" size={18} />
                             <input
                                 type="text"
                                 placeholder="Search rebels data..."
-                                className="w-full bg-(--color-bg-secondary) border border-transparent focus:border-(--color-primary) rounded-2xl py-3 pl-11 pr-4 text-sm placeholder:text-(--color-text-tertiary) focus:outline-none"
+                                className="w-full bg-[var(--color-bg-secondary)] border border-transparent focus:border-[var(--color-secondary)] focus:shadow-md focus:shadow-[var(--color-secondary)]/20 rounded-2xl py-3 pl-11 pr-4 text-sm placeholder:text-[var(--color-text-tertiary)] focus:outline-none transition-all duration-200"
                             />
                         </div>
                     </div>

@@ -46,9 +46,9 @@ export const ThemeSwitcher: React.FC = () => {
                 {/* Light mode button */}
                 <button
                     onClick={() => setMode('light')}
-                    className={`p-2 rounded transition-colors ${mode === 'light'
-                        ? 'bg-[var(--color-primary)] text-white'
-                        : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)]'
+                    className={`p-2 rounded transition-all duration-200 ${mode === 'light'
+                        ? 'bg-[var(--color-secondary)] text-white shadow-md shadow-[var(--color-secondary)]/20'
+                        : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-secondary)]/10 hover:text-[var(--color-secondary)]'
                         }`}
                     title="Light mode"
                     aria-label="Light mode"
@@ -59,9 +59,9 @@ export const ThemeSwitcher: React.FC = () => {
                 {/* Dark mode button */}
                 <button
                     onClick={() => setMode('dark')}
-                    className={`p-2 rounded transition-colors ${mode === 'dark'
-                        ? 'bg-[var(--color-primary)] text-white'
-                        : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)]'
+                    className={`p-2 rounded transition-all duration-200 ${mode === 'dark'
+                        ? 'bg-[var(--color-secondary)] text-white shadow-md shadow-[var(--color-secondary)]/20'
+                        : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-secondary)]/10 hover:text-[var(--color-secondary)]'
                         }`}
                     title="Dark mode"
                     aria-label="Dark mode"
@@ -72,7 +72,7 @@ export const ThemeSwitcher: React.FC = () => {
                 {/* Settings button */}
                 <button
                     onClick={() => setShowSettings(!showSettings)}
-                    className="p-2 rounded text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)] transition-colors ml-2"
+                    className="p-2 rounded text-[var(--color-text-secondary)] hover:bg-[var(--color-secondary)]/10 hover:text-[var(--color-secondary)] transition-all duration-200 ml-2"
                     title="Theme settings"
                     aria-label="Theme settings"
                 >
@@ -82,7 +82,7 @@ export const ThemeSwitcher: React.FC = () => {
 
             {/* Settings Dropdown */}
             {showSettings && (
-                <div className="absolute right-0 mt-2 w-72 bg-[var(--color-bg-primary)] border border-[var(--color-border)] rounded-lg shadow-lg p-4 z-[var(--z-index-dropdown)]">
+                <div className="glass glass-interactive absolute right-0 mt-2 w-72 p-4 z-[var(--z-index-dropdown)]">
                     {/* Accent Color Selection */}
                     <div className="mb-4">
                         <h3 className="text-sm font-semibold text-[var(--color-text-primary)] mb-3">
@@ -93,9 +93,9 @@ export const ThemeSwitcher: React.FC = () => {
                                 <button
                                     key={option.color}
                                     onClick={() => setAccent(option.color)}
-                                    className={`w-full aspect-square rounded-lg transition-all ${accent === option.color
-                                        ? 'ring-2 ring-offset-2 ring-[var(--color-primary)]'
-                                        : 'hover:scale-105'
+                                    className={`w-full aspect-square rounded-lg transition-all duration-200 hover:scale-110 hover:shadow-lg ${accent === option.color
+                                        ? 'ring-2 ring-offset-2 ring-[var(--color-secondary)] shadow-lg shadow-[var(--color-secondary)]/30'
+                                        : 'hover:shadow-[var(--color-secondary)]/20'
                                         }`}
                                     style={{ backgroundColor: option.color }}
                                     title={option.name}
@@ -106,24 +106,24 @@ export const ThemeSwitcher: React.FC = () => {
                     </div>
 
                     {/* Compact Mode Toggle */}
-                    <div className="border-t border-[var(--color-border)] pt-4">
-                        <label className="flex items-center gap-3 cursor-pointer">
+                    <div className="border-t border-[var(--color-border)]/30 pt-4">
+                        <label className="flex items-center gap-3 cursor-pointer group">
                             <input
                                 type="checkbox"
                                 checked={compactMode}
                                 onChange={e => setCompactMode(e.target.checked)}
-                                className="w-4 h-4 rounded"
+                                className="w-4 h-4 rounded accent-[var(--color-secondary)] cursor-pointer"
                             />
-                            <span className="text-sm font-medium text-[var(--color-text-primary)]">
+                            <span className="text-sm font-medium text-[var(--color-text-primary)] group-hover:text-[var(--color-secondary)] transition-colors duration-200">
                                 Compact layout
                             </span>
                         </label>
                     </div>
 
                     {/* Current theme info */}
-                    <div className="border-t border-[var(--color-border)] mt-4 pt-4">
+                    <div className="border-t border-[var(--color-border)]/30 mt-4 pt-4">
                         <p className="text-xs text-[var(--color-text-tertiary)]">
-                            Mode: <span className="font-semibold text-[var(--color-text-secondary)]">{mode}</span>
+                            Mode: <span className="font-semibold text-[var(--color-secondary)]">{mode}</span>
                         </p>
                         <p className="text-xs text-[var(--color-text-tertiary)]">
                             Current: <span className="font-semibold" style={{ color: accent }}>■</span>

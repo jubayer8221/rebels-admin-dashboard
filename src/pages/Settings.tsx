@@ -88,7 +88,7 @@ const NavItem = ({ label, icon: Icon, active, onClick, badge }: {
     return (
         <button
             onClick={onClick}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-left transition-all group`}
+            className={`flex-1 md:flex-none w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl text-left transition-all group text-sm sm:text-base`}
             style={active ? {
                 backgroundColor: 'var(--accent)',
                 color: 'white',
@@ -98,17 +98,17 @@ const NavItem = ({ label, icon: Icon, active, onClick, badge }: {
         >
             <Icon
                 size={16}
-                className={active ? 'text-white' : isDark ? 'text-gray-500 group-hover:text-gray-300' : 'text-gray-400 group-hover:text-gray-600'}
+                className={active ? 'text-white shrink-0' : isDark ? 'text-gray-500 group-hover:text-gray-300 shrink-0' : 'text-gray-400 group-hover:text-gray-600 shrink-0'}
             />
-            <span className={`text-sm font-bold flex-1 ${active ? 'text-white' : isDark ? 'text-gray-400 group-hover:text-gray-200' : 'text-gray-500 group-hover:text-gray-800'}`}>
+            <span className={`text-xs sm:text-sm font-bold flex-1 ${active ? 'text-white' : isDark ? 'text-gray-400 group-hover:text-gray-200' : 'text-gray-500 group-hover:text-gray-800'}`}>
                 {label}
             </span>
             {badge && (
-                <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${active ? 'bg-white/20 text-white' : 'bg-red-100 text-red-500'}`}>
+                <span className={`text-[9px] sm:text-[10px] font-black px-1.5 sm:px-2 py-0.5 rounded-full flex-shrink-0 ${active ? 'bg-white/20 text-white' : 'bg-red-100 text-red-500'}`}>
                     {badge}
                 </span>
             )}
-            {!active && <ChevronRight size={13} className={isDark ? 'text-gray-600' : 'text-gray-300'} />}
+            {!active && <ChevronRight size={13} className={`hidden md:block ${isDark ? 'text-gray-600' : 'text-gray-300'}`} />}
         </button>
     );
 };
@@ -202,21 +202,21 @@ const StoreSection = () => {
 
     return (
         <div className="space-y-5">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="md:col-span-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div className="sm:col-span-2">
                     <label className={s.label}>Store Name</label>
                     <div className="relative">
                         <Store size={13} className={`absolute left-3.5 top-1/2 -translate-y-1/2 ${s.subText}`} />
                         <input className={`${s.input} pl-9`} value={form.storeName} onChange={e => setForm({ ...form, storeName: e.target.value })} />
                     </div>
                 </div>
-                <div className="md:col-span-2">
+                <div className="sm:col-span-2">
                     <label className={s.label}>Store Tagline</label>
                     <input className={s.input} value={form.tagline} onChange={e => setForm({ ...form, tagline: e.target.value })} />
                 </div>
                 <div><label className={s.label}>Support Email</label><input className={s.input} value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} /></div>
                 <div><label className={s.label}>Support Phone</label><input className={s.input} value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} /></div>
-                <div className="md:col-span-2">
+                <div className="sm:col-span-2">
                     <label className={s.label}>Store Address</label>
                     <div className="relative">
                         <MapPin size={13} className={`absolute left-3.5 top-1/2 -translate-y-1/2 ${s.subText}`} />
@@ -677,21 +677,23 @@ const Settings: React.FC = () => {
 
     return (
         <div className={`min-h-screen ${isDark ? 'bg-[#0d0d0d]' : 'bg-gray-50/50'}`}>
-            <div className={`mx-auto flex w-full flex-col    lg:flex-row lg:items-start  ${getGap('lg')}`}>
-                {/* Sidebar Nav */}
-                <aside className={`w-full rounded-2xl border shadow-sm ${getPadding('md')} ${getGap('sm')} ${isDark ? 'bg-[#1a1a1a] border-[#2a2a2a]' : 'bg-white border-gray-100'} lg:w-56 lg:shrink-0 lg:sticky lg:top-1`}>
-                    {nav.map(n => (
-                        <NavItem key={n.id} {...n} active={activeSection === n.id} onClick={() => setActiveSection(n.id)} />
-                    ))}
+            <div className={`mx-auto flex w-full flex-col lg:flex-row lg:items-start gap-4 sm:gap-6 ${getGap('lg')}`}>
+                {/* Sidebar Nav - Mobile Tabs / Desktop Sidebar */}
+                <aside className={`w-full lg:w-56 lg:shrink-0 lg:sticky lg:top-4 rounded-2xl border shadow-sm ${getPadding('md')} ${getGap('sm')} ${isDark ? 'bg-[#1a1a1a] border-[#2a2a2a]' : 'bg-white border-gray-100'}`}>
+                    <div className="flex flex-col md:flex-row lg:flex-col gap-2 md:overflow-x-auto lg:overflow-x-visible">
+                        {nav.map(n => (
+                            <NavItem key={n.id} {...n} active={activeSection === n.id} onClick={() => setActiveSection(n.id)} />
+                        ))}
+                    </div>
                 </aside>
 
                 {/* Content Panel */}
                 <main className={`w-full rounded-2xl border shadow-sm ${isDark ? 'bg-[#1a1a1a] border-[#2a2a2a]' : 'bg-white border-gray-100'}`}>
-                    <div className={`${getPadding('md')} border-b ${isDark ? 'border-[#2a2a2a]' : 'border-gray-100'}`}>
-                        <h2 className={`text-lg font-black ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>{title}</h2>
-                        <p className={`text-xs font-medium mt-0.5 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>{desc}</p>
+                    <div className={`${getPadding('md')} sm:${getPadding('lg')} border-b ${isDark ? 'border-[#2a2a2a]' : 'border-gray-100'}`}>
+                        <h2 className={`text-lg sm:text-xl font-black ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>{title}</h2>
+                        <p className={`text-xs font-medium mt-1 sm:mt-0.5 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>{desc}</p>
                     </div>
-                    <div className={`${getPadding('md')} ${getGap('lg')}`}>
+                    <div className={`${getPadding('md')} sm:${getPadding('lg')} ${getGap('lg')}`}>
                         {sections[activeSection]}
                     </div>
                 </main>
